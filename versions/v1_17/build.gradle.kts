@@ -6,7 +6,25 @@ plugins {
 version = "1.0.0"
 
 repositories {
-    mavenLocal()
+
+    var bearerToken = System.getenv("LABYMOD_BEARER_TOKEN")
+
+    if (bearerToken == null && project.hasProperty("net.labymod.distributor.bearer-token")) {
+        bearerToken = project.property("net.labymod.distributor.bearer-token").toString()
+    }
+
+    maven("https://dist.labymod.net/api/v1/maven/release/") {
+        name = "LabyMod Distributor"
+
+        authentication {
+            create<HttpHeaderAuthentication>("header")
+        }
+
+        credentials(HttpHeaderCredentials::class) {
+            name = "Authorization"
+            value = "Bearer $bearerToken"
+        }
+    }
 }
 
 minecraft {
