@@ -11,8 +11,8 @@ val minecraftVersionTag: String = "1.17"
 version = "1.0.0"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 }
 
 minecraft {
@@ -43,7 +43,7 @@ volt {
         minVersion = "0.8.2"
     }
 
-    packageName("org.example.addon.v1_17.mixins")
+    packageName("net.labymod.addons.customcrosshair.v1_17.mixins")
 
     version = minecraftGameVersion
 }

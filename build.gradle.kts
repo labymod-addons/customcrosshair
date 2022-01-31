@@ -67,9 +67,9 @@ createReleaseJar {
 
 addon {
     addonInfo {
-        id("example")
-        displayName("Example Addon")
-        author("Example Author")
+        id("customcrosshair")
+        displayName("Custom Crosshair")
+        author("Pascal Helmerich")
         version(System.getenv().getOrDefault("VERSION", "0.0.0"))
     }
 
