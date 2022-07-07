@@ -27,7 +27,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("net.labymod.gradle", "addon", "0.1.34")
+        classpath("net.labymod.gradle", "addon", "0.2.28")
     }
 }
 
@@ -67,10 +67,15 @@ createReleaseJar {
 
 addon {
     addonInfo {
-        id("customcrosshair")
-        displayName("Custom Crosshair")
-        author("Pascal Helmerich")
+        namespace("customcrosshair")
+        displayName("CustomCrosshair")
+        author("LabyMedia GmbH")
         version(System.getenv().getOrDefault("VERSION", "0.0.0"))
+    }
+
+    dev {
+        releaseChannel = "improvement-addon-api"
+        commitReference = "unknown"
     }
 
     internalRelease()

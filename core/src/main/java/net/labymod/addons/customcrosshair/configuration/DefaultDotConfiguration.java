@@ -2,10 +2,10 @@ package net.labymod.addons.customcrosshair.configuration;
 
 import net.labymod.api.client.gui.screen.widget.widgets.input.SliderWidget.SliderSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
-import net.labymod.api.configuration.loader.ConfigLayer;
+import net.labymod.api.configuration.loader.Config;
 
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
-public class DefaultDotConfiguration implements ConfigLayer, DotConfiguration {
+public class DefaultDotConfiguration extends Config implements DotConfiguration {
 
   @SwitchSetting
   private boolean enabled = true;
@@ -13,11 +13,11 @@ public class DefaultDotConfiguration implements ConfigLayer, DotConfiguration {
   @SliderSetting(min = 1, max = 10)
   private int thickness = 1;
 
-  public int getThickness() {
+  public int thickness() {
     return this.thickness;
   }
 
-  public boolean isEnabled() {
+  public boolean enabled() {
     return this.enabled;
   }
 }

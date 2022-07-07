@@ -13,8 +13,7 @@ public class CrosshairDefaultFormRenderer implements CrosshairFormRenderer {
   private final RectangleRenderer rectangleRenderer;
 
   @Inject
-  public CrosshairDefaultFormRenderer(
-      RectangleRenderer rectangleRenderer) {
+  public CrosshairDefaultFormRenderer(RectangleRenderer rectangleRenderer) {
     this.rectangleRenderer = rectangleRenderer;
   }
 

@@ -4,6 +4,6 @@ import net.labymod.addons.customcrosshair.renderer.CrosshairFormRenderer;
 
 public interface CrosshairRenderType {
 
-  Class<? extends CrosshairFormRenderer> getRendererClass();
+  Class<? extends CrosshairFormRenderer> rendererClass();
 
 }

@@ -2,10 +2,10 @@ package net.labymod.addons.customcrosshair.configuration;
 
 import net.labymod.api.client.gui.screen.widget.widgets.input.SliderWidget.SliderSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
-import net.labymod.api.configuration.loader.ConfigLayer;
+import net.labymod.api.configuration.loader.Config;
 
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
-public class DefaultSpecialConfiguration implements SpecialConfiguration, ConfigLayer {
+public class DefaultSpecialConfiguration extends Config implements SpecialConfiguration {
 
   @SwitchSetting
   private boolean dynamicBow = true;
@@ -16,15 +16,15 @@ public class DefaultSpecialConfiguration implements SpecialConfiguration, Config
   @SliderSetting(min = 1, max = 10)
   private int rainbowSpeed = 5;
 
-  public boolean isDynamicBow() {
+  public boolean dynamicBow() {
     return this.dynamicBow;
   }
 
-  public boolean isRainbow() {
+  public boolean rainbow() {
     return this.rainbow;
   }
 
-  public int getRainbowSpeed() {
+  public int rainbowSpeed() {
     return this.rainbowSpeed;
   }
 

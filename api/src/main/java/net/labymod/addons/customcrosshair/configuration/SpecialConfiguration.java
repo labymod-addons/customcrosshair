@@ -2,10 +2,10 @@ package net.labymod.addons.customcrosshair.configuration;
 
 public interface SpecialConfiguration {
 
-  boolean isDynamicBow();
+  boolean dynamicBow();
 
-  boolean isRainbow();
+  boolean rainbow();
 
-  int getRainbowSpeed();
+  int rainbowSpeed();
 
 }

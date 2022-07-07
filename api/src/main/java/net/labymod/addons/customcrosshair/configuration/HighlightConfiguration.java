@@ -2,10 +2,10 @@ package net.labymod.addons.customcrosshair.configuration;
 
 public interface HighlightConfiguration {
 
-  int getHighlightHostile();
+  int highlightingHostile();
 
-  int getHighlightPassive();
+  int highlightingPassive();
 
-  int getHighlightPlayer();
+  int highlightingPlayer();
 
 }

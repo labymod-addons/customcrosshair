@@ -2,33 +2,35 @@ package net.labymod.addons.customcrosshair.renderer.form;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.labymod.addons.customcrosshair.configuration.DefaultCustomCrosshairConfiguration;
+import net.labymod.addons.customcrosshair.CustomCrosshair;
+import net.labymod.addons.customcrosshair.configuration.AppearanceConfiguration;
 import net.labymod.addons.customcrosshair.renderer.CrosshairFormRenderer;
+import net.labymod.api.client.render.RenderPipeline;
 import net.labymod.api.client.render.draw.CircleRenderer;
 import net.labymod.api.client.render.matrix.Stack;
 
 @Singleton
 public class CrosshairCircleFormRenderer implements CrosshairFormRenderer {
 
-  private final DefaultCustomCrosshairConfiguration config;
-  private final CircleRenderer circleRenderer;
+  private final CustomCrosshair addon;
+  private final RenderPipeline renderPipeline;
 
   @Inject
-  public CrosshairCircleFormRenderer(CircleRenderer circleRenderer,
-      DefaultCustomCrosshairConfiguration config) {
-    this.config = config;
-    this.circleRenderer = circleRenderer;
+  public CrosshairCircleFormRenderer(CustomCrosshair addon, RenderPipeline renderPipeline) {
+    this.addon = addon;
+    this.renderPipeline = renderPipeline;
   }
 
   @Override
   public void render(Stack stack, float x, float y, float gap, int color, int outlineColor) {
-    float endRadius = gap + this.config.getAppearanceConfiguration().getThickness();
-    float outlineEndRadius =
-        endRadius + this.config.getAppearanceConfiguration().getOutlineThickness();
+    AppearanceConfiguration appearance = this.addon.configuration().appearance();
+    float endRadius = gap + appearance.thickness();
+    float outlineEndRadius = endRadius + appearance.outlineThickness();
 
-    this.circleRenderer.renderDonut(stack, x, y, endRadius, outlineEndRadius, outlineColor, true);
-    this.circleRenderer.renderDonut(stack, x, y, gap, endRadius, color, true);
+    CircleRenderer circleRenderer = this.renderPipeline.circleRenderer();
+    circleRenderer.pos(x, y).donutRadius(endRadius, outlineEndRadius).color(outlineColor)
+        .render(stack);
+    circleRenderer.pos(x, y).donutRadius(gap, endRadius).color(color)
+        .render(stack);
   }
-
-
 }

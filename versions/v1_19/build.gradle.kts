@@ -1,12 +1,13 @@
 version = "0.1.0"
 
+
 plugins {
     id("net.labymod.gradle.vanilla")
     id("net.labymod.gradle.volt")
 }
 
-val minecraftGameVersion: String = "1.17.1"
-val minecraftVersionTag: String = "1.17"
+val minecraftGameVersion = "1.19"
+val minecraftVersionTag: String = "1.19"
 
 version = "1.0.0"
 
@@ -25,7 +26,6 @@ minecraft {
             args("--tweakClass", "net.labymod.core.loader.vanilla.launchwrapper.LabyModLaunchWrapperTweaker")
             args("--labymod-dev-environment", "true")
             args("--addon-dev-environment", "true")
-            jvmArgs("-Dmixin.debug=true")
             jvmArgs("-Dnet.labymod.running-version=$minecraftGameVersion")
         }
     }
@@ -33,26 +33,26 @@ minecraft {
 
 dependencies {
     annotationProcessor("net.labymod:sponge-mixin:0.1.0+0.11.2+mixin.0.8.5")
-
     labyProcessor()
-    labyApi("v1_17")
+    labyApi("v1_19")
     api(project(":core"))
 }
 
 volt {
     mixin {
-        compatibilityLevel = "JAVA_16"
+        compatibilityLevel = "JAVA_17"
         minVersion = "0.8.2"
     }
 
-    packageName("net.labymod.addons.customcrosshair.v1_17.mixins")
+    packageName("org.example.addon.v1_19.mixins")
 
     version = minecraftGameVersion
 }
 
+
 intellij {
     minorMinecraftVersion(minecraftVersionTag)
-    val javaVersion = project.findProperty("net.labymod.runconfig-v1_17-java-version")
+    val javaVersion = project.findProperty("net.labymod.runconfig-v1_19-java-version")
 
     if (javaVersion != null) {
         run {

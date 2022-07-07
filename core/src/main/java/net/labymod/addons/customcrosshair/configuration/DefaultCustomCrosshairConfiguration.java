@@ -1,16 +1,14 @@
 package net.labymod.addons.customcrosshair.configuration;
 
-import com.google.inject.Singleton;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
+import net.labymod.api.configuration.loader.Config;
 import net.labymod.api.configuration.loader.annotation.ConfigName;
-import net.labymod.api.configuration.loader.impl.AddonConfig;
 import net.labymod.api.models.Implement;
 
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
-@Singleton
 @ConfigName("settings")
 @Implement(CustomCrosshairConfiguration.class)
-public class DefaultCustomCrosshairConfiguration extends AddonConfig implements
+public class DefaultCustomCrosshairConfiguration extends Config implements
     CustomCrosshairConfiguration {
 
   @SwitchSetting
@@ -27,32 +25,32 @@ public class DefaultCustomCrosshairConfiguration extends AddonConfig implements
   private DefaultVisibilityConfiguration visibility = new DefaultVisibilityConfiguration();
 
   @Override
-  public boolean isEnabled() {
+  public boolean enabled() {
     return this.enabled;
   }
 
   @Override
-  public AppearanceConfiguration getAppearanceConfiguration() {
+  public AppearanceConfiguration appearance() {
     return this.appearance;
   }
 
   @Override
-  public DotConfiguration getDotConfiguration() {
+  public DotConfiguration dot() {
     return this.dot;
   }
 
   @Override
-  public HighlightConfiguration getHighlightConfiguration() {
+  public HighlightConfiguration highlight() {
     return this.highlight;
   }
 
   @Override
-  public SpecialConfiguration getSpecialConfiguration() {
+  public SpecialConfiguration special() {
     return this.special;
   }
 
   @Override
-  public VisibilityConfiguration getVisibilityConfiguration() {
+  public VisibilityConfiguration visibility() {
     return this.visibility;
   }
 }

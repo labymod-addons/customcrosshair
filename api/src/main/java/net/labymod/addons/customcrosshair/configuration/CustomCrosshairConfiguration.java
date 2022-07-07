@@ -1,19 +1,17 @@
 package net.labymod.addons.customcrosshair.configuration;
 
-import net.labymod.api.configuration.loader.Config;
+public interface CustomCrosshairConfiguration {
 
-public interface CustomCrosshairConfiguration extends Config {
+  boolean enabled();
 
-  boolean isEnabled();
+  AppearanceConfiguration appearance();
 
-  AppearanceConfiguration getAppearanceConfiguration();
+  DotConfiguration dot();
 
-  DotConfiguration getDotConfiguration();
+  HighlightConfiguration highlight();
 
-  HighlightConfiguration getHighlightConfiguration();
+  SpecialConfiguration special();
 
-  SpecialConfiguration getSpecialConfiguration();
-
-  VisibilityConfiguration getVisibilityConfiguration();
+  VisibilityConfiguration visibility();
 
 }

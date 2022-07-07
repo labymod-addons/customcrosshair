@@ -2,9 +2,10 @@ package net.labymod.addons.customcrosshair.renderer.form;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.labymod.addons.customcrosshair.configuration.CustomCrosshairConfiguration;
-import net.labymod.addons.customcrosshair.configuration.DefaultCustomCrosshairConfiguration;
+import net.labymod.addons.customcrosshair.CustomCrosshair;
+import net.labymod.addons.customcrosshair.configuration.AppearanceConfiguration;
 import net.labymod.addons.customcrosshair.renderer.CrosshairFormRenderer;
+import net.labymod.api.client.render.RenderPipeline;
 import net.labymod.api.client.render.draw.RectangleRenderer;
 import net.labymod.api.client.render.matrix.Stack;
 import net.labymod.api.util.bounds.DefaultRectangle;
@@ -13,23 +14,21 @@ import net.labymod.api.util.bounds.Rectangle;
 @Singleton
 public class CrosshairCrossFormRenderer implements CrosshairFormRenderer {
 
-  private final RectangleRenderer rectangleRenderer;
-  private final CustomCrosshairConfiguration config;
+  private final CustomCrosshair addon;
+  private final RenderPipeline renderPipeline;
 
   @Inject
-  public CrosshairCrossFormRenderer(
-      DefaultCustomCrosshairConfiguration config,
-      RectangleRenderer rectangleRenderer) {
-    this.config = config;
-    this.rectangleRenderer = rectangleRenderer;
+  public CrosshairCrossFormRenderer(CustomCrosshair addon, RenderPipeline renderPipeline) {
+    this.addon = addon;
+    this.renderPipeline = renderPipeline;
   }
 
   @Override
   public void render(Stack stack, float x, float y, float gap, int color, int outlineColor) {
-
-    float width = this.config.getAppearanceConfiguration().getWidth();
-    float height = this.config.getAppearanceConfiguration().getHeight();
-    float thickness = this.config.getAppearanceConfiguration().getThickness();
+    AppearanceConfiguration appearance = this.addon.configuration().appearance();
+    float width = appearance.width();
+    float height = appearance.height();
+    float thickness = appearance.thickness();
     float halfThickness = thickness / 2;
 
     //bottom
@@ -51,9 +50,11 @@ public class CrosshairCrossFormRenderer implements CrosshairFormRenderer {
 
   public void renderOutlinedRectangle(Stack stack, float x, float y, float width, float height,
       int color, int outlineColor) {
+    RectangleRenderer renderer = this.renderPipeline.rectangleRenderer();
+
     Rectangle rectangle = DefaultRectangle.relative(x, y, width, height);
-    this.rectangleRenderer.renderOutline(stack, rectangle, outlineColor,
-        this.config.getAppearanceConfiguration().getOutlineThickness());
-    this.rectangleRenderer.renderRectangle(stack, rectangle, color);
+    renderer.renderOutline(stack, rectangle, outlineColor,
+        this.addon.configuration().appearance().outlineThickness());
+    renderer.renderRectangle(stack, rectangle, color);
   }
 }

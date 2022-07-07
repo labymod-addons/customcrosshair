@@ -8,14 +8,13 @@ import net.labymod.addons.customcrosshair.renderer.form.CrosshairDefaultFormRend
 import net.labymod.addons.customcrosshair.renderer.form.CrosshairDotFormRenderer;
 import net.labymod.addons.customcrosshair.renderer.form.CrosshairSquareFormRenderer;
 
-public enum CrosshairType implements CrosshairRenderType{
+public enum CrosshairType implements CrosshairRenderType {
   DEFAULT(CrosshairDefaultFormRenderer.class),
   CROSS(CrosshairCrossFormRenderer.class),
   CIRCLE(CrosshairCircleFormRenderer.class),
   SQUARE(CrosshairSquareFormRenderer.class),
   ARROW(CrosshairArrowFormRenderer.class),
   DOT(CrosshairDotFormRenderer.class);
-
 
   private final Class<? extends CrosshairFormRenderer> rendererClass;
 
@@ -24,7 +23,7 @@ public enum CrosshairType implements CrosshairRenderType{
   }
 
   @Override
-  public Class<? extends CrosshairFormRenderer> getRendererClass() {
+  public Class<? extends CrosshairFormRenderer> rendererClass() {
     return this.rendererClass;
   }
 }

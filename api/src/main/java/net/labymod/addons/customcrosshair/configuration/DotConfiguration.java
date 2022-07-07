@@ -2,8 +2,8 @@ package net.labymod.addons.customcrosshair.configuration;
 
 public interface DotConfiguration {
 
-  int getThickness();
+  int thickness();
 
-  boolean isEnabled();
+  boolean enabled();
 
 }

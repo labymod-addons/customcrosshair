@@ -4,21 +4,21 @@ import net.labymod.addons.customcrosshair.CrosshairRenderType;
 
 public interface AppearanceConfiguration {
 
-  int getWidth();
+  int width();
 
-  int getHeight();
+  int height();
 
-  int getThickness();
+  int thickness();
 
-  int getColor();
+  int color();
 
-  int getOutlineThickness();
+  int outlineThickness();
 
-  int getOutlineColor();
+  int outlineColor();
 
-  int getGap();
+  int gap();
 
-  CrosshairRenderType getType();
+  CrosshairRenderType type();
 
-  int getRotation();
+  int rotation();
 }

@@ -1,10 +1,9 @@
 package net.labymod.addons.customcrosshair.configuration;
 
-public interface VisibilityConfiguration
-{
+public interface VisibilityConfiguration {
 
-  boolean isDisplayFirstPerson();
-  boolean isDisplayThirdPerson();
-  boolean isDisplayDebug();
+  boolean displayInFirstPerson();
+
+  boolean displayInThirdPerson();
 
 }

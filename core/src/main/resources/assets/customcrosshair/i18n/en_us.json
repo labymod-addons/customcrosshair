@@ -1,0 +1,76 @@
+{
+  "settings": {
+    "customcrosshair": {
+      "name": "CustomCrosshair",
+      "enabled": {
+        "name": "Enabled"
+      },
+      "appearance": {
+        "name": "Appearance",
+        "type": {
+          "name": "Type",
+          "default": "Default",
+          "cross": "Cross",
+          "circle": "Circle",
+          "square": "Square",
+          "arrow": "Arrow",
+          "dot": "Dot"
+        },
+        "thickness": {
+          "name": "Thickness"
+        },
+        "color": {
+          "name": "Color"
+        },
+        "width": {
+          "name": "Width"
+        },
+        "height": {
+          "name": "Height"
+        },
+        "gap": {
+          "name": "Gap"
+        },
+        "rotation": {
+          "name": "Rotation"
+        },
+        "outlineThickness": {
+          "name": "Outline Thickness"
+        },
+        "outlineColor": {
+          "name": "Outline Color"
+        }
+      },
+      "dot": {
+        "name": "Dot Crosshair",
+        "enabled": {
+          "name": "Enabled"
+        },
+        "thickness": {
+          "name": "Thickness"
+        }
+      },
+      "special": {
+        "name": "Special",
+        "dynamicBow": {
+          "name": "Dynamic Bow"
+        },
+        "rainbow": {
+          "name": "Rainbow"
+        },
+        "rainbowSpeed": {
+          "name": "Rainbow Speed"
+        }
+      },
+      "visibility": {
+        "name": "Visibility",
+        "displayInFirstPerson": {
+          "name": "Display in First Person"
+        },
+        "displayInThirdPerson": {
+          "name": "Display in Third Person"
+        }
+      }
+    }
+  }
+}
