@@ -14,27 +14,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package net.labymod.addons.customcrosshair;
+package net.labymod.addons.customcrosshair.util;
 
-import net.labymod.addons.customcrosshair.listener.IngameOverlayElementRenderListener;
-import net.labymod.api.addon.LabyAddon;
-import net.labymod.api.models.addon.annotation.AddonMain;
+public enum Rotation {
+  NONE(0),
+  FORTY_FIVE(45),
+  NINETY(90),
+  ONE_THIRTY_FIVE(135),
+  ONE_EIGHTY(180),
+  TWO_TWENTY_FIVE(225),
+  TWO_SEVENTY(270),
+  THREE_FIFTEEN(315),
+  ;
 
-@AddonMain
-public class CustomCrosshair extends LabyAddon<CustomCrosshairConfiguration> {
+  private final int degrees;
 
-  @Override
-  protected void enable() {
-    this.registerSettingCategory();
-
-    this.registerListener(new IngameOverlayElementRenderListener(
-        this,
-        this.labyAPI().minecraft()
-    ));
+  Rotation(int degrees) {
+    this.degrees = degrees;
   }
 
-  @Override
-  protected Class<CustomCrosshairConfiguration> configurationClass() {
-    return CustomCrosshairConfiguration.class;
+  public int getDegrees() {
+    return this.degrees;
   }
 }

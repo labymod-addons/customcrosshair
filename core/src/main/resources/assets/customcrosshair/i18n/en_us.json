@@ -1,74 +1,62 @@
 {
-  "settings": {
-    "customcrosshair": {
+  "customcrosshair": {
+    "settings": {
       "name": "CustomCrosshair",
       "enabled": {
         "name": "Enabled"
       },
-      "appearance": {
-        "name": "Appearance",
-        "type": {
-          "name": "Type",
-          "default": "Default",
+      "type": {
+        "name": "Type",
+        "entries": {
+          "default": "Vanilla",
+          "defaultWithDot": "Vanilla With Dot",
+          "defaultWithGap": "Vanilla With Gap",
           "cross": "Cross",
+          "crossWithDot": "Cross With Dot",
+          "crossWithGap": "Cross With Gap",
           "circle": "Circle",
-          "square": "Square",
-          "arrow": "Arrow",
-          "dot": "Dot"
-        },
-        "thickness": {
-          "name": "Thickness"
-        },
-        "color": {
-          "name": "Color"
-        },
-        "width": {
-          "name": "Width"
-        },
-        "height": {
-          "name": "Height"
-        },
-        "gap": {
-          "name": "Gap"
-        },
-        "rotation": {
-          "name": "Rotation"
-        },
-        "outlineThickness": {
-          "name": "Outline Thickness"
-        },
-        "outlineColor": {
-          "name": "Outline Color"
+          "circleWithDot": "Circle With Dot",
+          "crosshair": "Crosshair",
+          "crosshairWithDot": "Crosshair With Dot"
         }
       },
-      "dot": {
-        "name": "Dot Crosshair",
-        "enabled": {
-          "name": "Enabled"
-        },
-        "thickness": {
-          "name": "Thickness"
+      "displayInThirdPerson": {
+        "name": "Display in Third Person"
+      },
+      "rotation": {
+        "name": "Rotation",
+        "entries": {
+          "none": "None",
+          "fortyFive": "45 Degrees",
+          "ninety": "90 Degrees",
+          "oneThirtyFive": "135 Degrees",
+          "oneEighty": "180 Degrees",
+          "twoTwentyFive": "225 Degrees",
+          "twoSeventy": "270 Degrees",
+          "threeFifteen": "315 Degrees"
         }
       },
-      "special": {
-        "name": "Special",
-        "dynamicBow": {
-          "name": "Dynamic Bow"
-        },
-        "rainbow": {
-          "name": "Rainbow"
-        },
-        "rainbowSpeed": {
-          "name": "Rainbow Speed"
-        }
+      "vanillaBlending": {
+        "name": "Vanilla Blending"
       },
-      "visibility": {
-        "name": "Visibility",
-        "displayInFirstPerson": {
-          "name": "Display in First Person"
-        },
-        "displayInThirdPerson": {
-          "name": "Display in Third Person"
+      "color": {
+        "name": "Color"
+      },
+      "dynamicColor": {
+        "name": "Dynamic Color"
+      },
+      "neutralColor": {
+        "name": "Neutral Color"
+      },
+      "hostileColor": {
+        "name": "Hostile Color"
+      },
+      "playerColor": {
+        "name": "Player Color"
+      },
+      "header": {
+        "coloring": {
+          "name": "Colors"
         }
       }
     }

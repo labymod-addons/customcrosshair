@@ -1,82 +1,98 @@
-buildscript {
-    repositories {
-        var bearerToken = System.getenv("LABYMOD_BEARER_TOKEN")
-
-        if (bearerToken == null && project.hasProperty("net.labymod.distributor.bearer-token")) {
-            bearerToken = project.property("net.labymod.distributor.bearer-token").toString()
-        }
-
-        maven("https://dist.labymod.net/api/v1/maven/release/") {
-            name = "LabyMod Distributor"
-
-            authentication {
-                create<HttpHeaderAuthentication>("header")
-            }
-
-            credentials(HttpHeaderCredentials::class) {
-                name = "Authorization"
-                value = "Bearer $bearerToken"
-            }
-        }
-
-
-        maven("https://repo.spongepowered.org/repository/maven-public") {
-            name = "SpongePowered Repository"
-        }
-        mavenLocal()
-    }
-
-    dependencies {
-        classpath("net.labymod.gradle", "addon", "0.2.28")
-    }
-}
-
 plugins {
     id("java-library")
+    id("net.labymod.gradle")
+    id("net.labymod.gradle.addon")
+    id("org.cadixdev.licenser") version ("0.6.1")
 }
 
 group = "org.example"
 version = "1.0.0"
 
-plugins.apply("net.labymod.gradle.addon")
-
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+
+labyMod {
+    defaultPackageName = "net.labymod.addons.customcrosshair" //change this to your main package name (used by all modules)
+    addonInfo {
+        namespace = "customcrosshair"
+        displayName = "CustomCrosshair"
+        author = "LabyMedia GmbH"
+        version = System.getenv().getOrDefault("VERSION", "0.0.1")
+    }
+
+    minecraft {
+        registerVersions("1.8.9", "1.17.1", "1.18.2", "1.19.2", "1.19.3") { version, provider ->
+            configureRun(provider, version)
+        }
+
+        subprojects.forEach {
+            if (it.name != "game-runner") {
+                filter(it.name)
+            }
+        }
+    }
+
+    addonDev {
+        internalRelease()
+    }
+}
 
 subprojects {
     plugins.apply("java-library")
+    plugins.apply("net.labymod.gradle")
     plugins.apply("net.labymod.gradle.addon")
+    plugins.apply("org.cadixdev.licenser")
 
     repositories {
         maven("https://libraries.minecraft.net/")
         maven("https://repo.spongepowered.org/repository/maven-public/")
+        maven("https://jitpack.io")
         mavenLocal()
     }
+
+    license {
+        header(rootProject.file("gradle/LICENSE-HEADER.txt"))
+        newLine.set(true)
+    }
 }
 
-createReleaseJar {
-    // Exclude a project from the release jar generation process
-    exclude(project(":versions"))
+fun configureRun(provider: net.labymod.gradle.core.minecraft.provider.VersionProvider, gameVersion: String) {
+    provider.runConfiguration {
+        mainClass = "net.minecraft.launchwrapper.Launch"
+        jvmArgs("-Dnet.labymod.running-version=${gameVersion}")
+        jvmArgs("-Dmixin.debug=true")
+        jvmArgs("-Dnet.labymod.debugging.all=true")
+        jvmArgs("-Dmixin.env.disableRefMap=true")
 
-    // You can also exclude version implementation if your addon
-    // does not require version implementation
-    //
-    // exclude(project(":v1_8"))
-    // exclude(project(":v1_17"))
-    // exclude(project(":v1_18"))
-}
-
-addon {
-    addonInfo {
-        namespace("customcrosshair")
-        displayName("CustomCrosshair")
-        author("LabyMedia GmbH")
-        version(System.getenv().getOrDefault("VERSION", "0.0.0"))
+        args("--tweakClass", "net.labymod.core.loader.vanilla.launchwrapper.LabyModLaunchWrapperTweaker")
+        args("--labymod-dev-environment", "true")
+        args("--addon-dev-environment", "true")
     }
 
-    dev {
-        releaseChannel = "improvement-addon-api"
-        commitReference = "unknown"
+    provider.javaVersion = when (gameVersion) {
+        "1.8.9", "1.12.2", "1.16.5" -> {
+            JavaVersion.VERSION_1_8
+        }
+
+        "1.17.1" -> {
+            JavaVersion.VERSION_16
+        }
+
+        else -> {
+            JavaVersion.VERSION_17
+        }
     }
 
-    internalRelease()
+    provider.mixin {
+        val mixinMinVersion = when (gameVersion) {
+            "1.8.9", "1.12.2", "1.16.5" -> {
+                "0.6.6"
+            }
+
+            else -> {
+                "0.8.2"
+            }
+        }
+
+        minVersion = mixinMinVersion
+    }
 }

@@ -1,10 +1,25 @@
+/*
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 package net.labymod.addons.customcrosshair.listener;
 
-import com.google.inject.Inject;
 import net.labymod.addons.customcrosshair.CustomCrosshair;
-import net.labymod.addons.customcrosshair.configuration.CustomCrosshairConfiguration;
-import net.labymod.addons.customcrosshair.configuration.VisibilityConfiguration;
-import net.labymod.addons.customcrosshair.renderer.CustomCrosshairRenderer;
+import net.labymod.addons.customcrosshair.CustomCrosshairConfiguration;
+import net.labymod.addons.customcrosshair.canvas.CrosshairCanvasRenderer;
+import net.labymod.api.client.Minecraft;
 import net.labymod.api.client.options.Perspective;
 import net.labymod.api.event.Phase;
 import net.labymod.api.event.Priority;
@@ -14,40 +29,33 @@ import net.labymod.api.event.client.render.overlay.IngameOverlayElementRenderEve
 
 public class IngameOverlayElementRenderListener {
 
+  private final CrosshairCanvasRenderer canvasRenderer;
   private final CustomCrosshair addon;
-  private final CustomCrosshairRenderer customCrosshairRenderer;
+  private final Minecraft minecraft;
 
-  @Inject
-  private IngameOverlayElementRenderListener(CustomCrosshair addon,
-      CustomCrosshairRenderer customCrosshairRenderer) {
+  public IngameOverlayElementRenderListener(
+      CustomCrosshair addon,
+      Minecraft minecraft
+  ) {
     this.addon = addon;
-    this.customCrosshairRenderer = customCrosshairRenderer;
+    this.minecraft = minecraft;
+    this.canvasRenderer = new CrosshairCanvasRenderer(minecraft);
   }
 
   @Subscribe(Priority.LATE)
   public void onRender(IngameOverlayElementRenderEvent event) {
-    CustomCrosshairConfiguration configuration = this.addon.configuration();
-
-    if ((!event.isCancelled() && !event.getElementType().equals(OverlayElementType.CROSSHAIR)
-        && event.getPhase().equals(Phase.POST)) || !configuration.enabled()) {
+    if (event.phase() != Phase.PRE || event.isCancelled()
+        || event.elementType() != OverlayElementType.CROSSHAIR) {
       return;
     }
 
-    VisibilityConfiguration visibilityConfiguration = configuration.visibility();
-    Perspective perspective = this.addon.labyAPI().getMinecraft().getOptions().getPerspective();
-    if (perspective.equals(Perspective.FIRST_PERSON)) {
-      if (!visibilityConfiguration.displayInFirstPerson()) {
-        return;
-      }
-
-    } else {
-      if (!visibilityConfiguration.displayInThirdPerson()) {
-        return;
-      }
+    CustomCrosshairConfiguration configuration = this.addon.configuration();
+    Perspective perspective = this.minecraft.options().perspective();
+    if (perspective != Perspective.FIRST_PERSON && !configuration.displayInThirdPerson().get()) {
+      return;
     }
 
     event.setCancelled(true);
-    this.customCrosshairRenderer.tick();
-    this.customCrosshairRenderer.renderCrosshair(event.getStack());
+    this.canvasRenderer.render(event.stack(), configuration);
   }
 }
