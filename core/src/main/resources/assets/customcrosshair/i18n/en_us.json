@@ -24,17 +24,7 @@
         "name": "Display in Third Person"
       },
       "rotation": {
-        "name": "Rotation",
-        "entries": {
-          "none": "None",
-          "fortyFive": "45 Degrees",
-          "ninety": "90 Degrees",
-          "oneThirtyFive": "135 Degrees",
-          "oneEighty": "180 Degrees",
-          "twoTwentyFive": "225 Degrees",
-          "twoSeventy": "270 Degrees",
-          "threeFifteen": "315 Degrees"
-        }
+        "name": "Rotation"
       },
       "vanillaBlending": {
         "name": "Vanilla Blending"
