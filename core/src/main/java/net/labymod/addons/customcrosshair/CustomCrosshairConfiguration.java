@@ -17,8 +17,8 @@
 package net.labymod.addons.customcrosshair;
 
 import net.labymod.addons.customcrosshair.canvas.CrosshairCanvasPreset;
-import net.labymod.addons.customcrosshair.util.Rotation;
 import net.labymod.api.addon.AddonConfig;
+import net.labymod.api.client.gui.screen.widget.widgets.input.SliderWidget.SliderSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.color.ColorPickerWidget.ColorPickerSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.dropdown.DropdownWidget.DropdownSetting;
@@ -43,8 +43,8 @@ public class CustomCrosshairConfiguration extends AddonConfig {
   @SwitchSetting
   private final ConfigProperty<Boolean> displayInThirdPerson = new ConfigProperty<>(false);
 
-  @DropdownSetting
-  private final ConfigProperty<Rotation> rotation = ConfigProperty.createEnum(Rotation.NONE);
+  @SliderSetting(min = 0, max = 360, steps = 45)
+  private final ConfigProperty<Integer> rotation = new ConfigProperty<>(0);
 
   @SettingSection("coloring")
   @SwitchSetting
@@ -91,7 +91,7 @@ public class CustomCrosshairConfiguration extends AddonConfig {
     return this.displayInThirdPerson;
   }
 
-  public ConfigProperty<Rotation> rotation() {
+  public ConfigProperty<Integer> rotation() {
     return this.rotation;
   }
 

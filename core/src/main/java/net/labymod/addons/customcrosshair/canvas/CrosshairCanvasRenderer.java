@@ -61,7 +61,7 @@ public class CrosshairCanvasRenderer {
     float y = ((int) bounds.getHeight() - 15) / 2;
 
     stack.push();
-    int degrees = configuration.rotation().get().getDegrees();
+    int degrees = configuration.rotation().get();
     if (degrees != 0 && degrees != 360) {
       float translationX = x + CrosshairCanvas.SIZE / 2.0F;
       float translationY = y + CrosshairCanvas.SIZE / 2.0F;
@@ -87,6 +87,10 @@ public class CrosshairCanvasRenderer {
         vanillaBlending,
         configuration
     );
+
+    if (vanillaBlending) {
+      Laby.gfx().defaultBlend();
+    }
 
     stack.pop();
   }
