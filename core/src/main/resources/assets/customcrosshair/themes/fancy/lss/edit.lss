@@ -1,0 +1,39 @@
+@import super();
+
+.preset-container {
+  space-between-entries: 2;
+
+  CrosshairCanvasRenderer {
+    background-color: rgba(130, 130, 130, 50);
+    border-radius: 4;
+
+    &:hover {
+      background-color: rgba(147, 153, 156, 70);
+    }
+  }
+}
+
+.edit-wrapper {
+  .input-wrapper {
+    .button:hover.button:enabled {
+      background-color: rgba(147, 153, 156, 70) !important;
+    }
+
+    .button {
+      filter: blur(1);
+      height: 18 !important;
+
+      &:enabled {
+        background-color: rgba(130, 130, 130, 50);
+      }
+
+      &:not(:enabled) {
+        background-color: rgba(55, 55, 55, 50);
+
+        Component {
+          text-color: rgb(241, 241, 241);
+        }
+      }
+    }
+  }
+}

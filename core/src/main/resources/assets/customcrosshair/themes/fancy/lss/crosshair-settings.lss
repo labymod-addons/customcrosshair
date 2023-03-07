@@ -1,0 +1,20 @@
+CustomCrosshairSetting {
+  background-color: var(--button-color);
+  padding: 2;
+  min-width: 15;
+  max-width: 15;
+  max-height: 15;
+  border-radius: 4;
+  filter: blur(1);
+
+  &:hover {
+    background-color: var(--button-color-hover);
+  }
+
+  CrosshairCanvasRenderer {
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
