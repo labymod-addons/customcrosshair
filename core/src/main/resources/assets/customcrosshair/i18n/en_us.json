@@ -5,20 +5,8 @@
       "enabled": {
         "name": "Enabled"
       },
-      "type": {
-        "name": "Type",
-        "entries": {
-          "default": "Vanilla",
-          "defaultWithDot": "Vanilla With Dot",
-          "defaultWithGap": "Vanilla With Gap",
-          "cross": "Cross",
-          "crossWithDot": "Cross With Dot",
-          "crossWithGap": "Cross With Gap",
-          "circle": "Circle",
-          "circleWithDot": "Circle With Dot",
-          "crosshair": "Crosshair",
-          "crosshairWithDot": "Crosshair With Dot"
-        }
+      "canvas": {
+        "name": "Edit Crosshair"
       },
       "displayInThirdPerson": {
         "name": "Display in Third Person"
@@ -48,6 +36,33 @@
         "coloring": {
           "name": "Colors"
         }
+      }
+    },
+    "activity": {
+      "presets": {
+        "title": "Presets"
+      },
+      "edit": {
+        "title": "Customize",
+        "share": {
+          "name": "Share",
+          "description": "Copy the unique identifier of the current crosshair to your clipboard. Other players can use this identifier to import your crosshair."
+        },
+        "import": {
+          "name": "Import",
+          "description": "Import a crosshair based on its unique identifier. If the button is disabled, no valid identifier was found in your clipboard."
+        }
+      }
+    },
+    "notification": {
+      "share": {
+        "copied": "The crosshair has been copied to your clipboard.",
+        "error": "Something went wrong while generating the identifier. Please check your logs."
+      },
+      "import": {
+        "success": "Successfully imported the crosshair from your clipboard.",
+        "invalid": "Could not find a valid crosshair identifier in your clipboard.",
+        "error": "An error occurred while importing the crosshair."
       }
     }
   }

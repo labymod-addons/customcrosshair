@@ -16,14 +16,8 @@
 
 package net.labymod.addons.customcrosshair.canvas;
 
-import net.labymod.addons.customcrosshair.CustomCrosshairConfiguration;
 import net.labymod.api.Laby;
-import net.labymod.api.client.Minecraft;
-import net.labymod.api.client.entity.Entity;
-import net.labymod.api.client.entity.LivingEntity;
-import net.labymod.api.client.entity.player.Player;
 import net.labymod.api.client.gfx.color.blend.GFXBlendParameter;
-import net.labymod.api.client.gui.screen.widget.attributes.bounds.Bounds;
 import net.labymod.api.client.render.draw.RectangleRenderer;
 import net.labymod.api.client.render.draw.batch.BatchRectangleRenderer;
 import net.labymod.api.client.render.gl.GLConstants;
@@ -31,12 +25,10 @@ import net.labymod.api.client.render.matrix.Stack;
 import net.labymod.api.client.render.vertex.phase.RenderPhase;
 import net.labymod.api.client.render.vertex.shard.RenderShards;
 import net.labymod.api.util.Color;
-import org.jetbrains.annotations.NotNull;
 
 public class CrosshairCanvasRenderer {
 
-  @NotNull
-  public static final RenderPhase NO_TEXTURED_RECTANGLE_PHASE = RenderPhase.builder()
+  private static final RenderPhase NO_TEXTURED_RECTANGLE_PHASE = RenderPhase.builder()
       .name("rectangle_phase")
       .vertexFormat(Laby.references().oldVertexFormatRegistry().getPositionColor())
       .mode(GLConstants.QUADS)
@@ -48,99 +40,75 @@ public class CrosshairCanvasRenderer {
 
   private static final int DEFAULT_COLOR = Color.WHITE.get();
 
-  private final Minecraft minecraft;
-
-  public CrosshairCanvasRenderer(Minecraft minecraft) {
-    this.minecraft = minecraft;
+  public void renderVanillaBlended(
+      final Stack stack,
+      final CrosshairCanvas canvas,
+      final float minX,
+      final float minY
+  ) {
+    this.renderVanillaBlended(stack, canvas, minX, minY, DEFAULT_COLOR);
   }
 
-  public void render(Stack stack, CustomCrosshairConfiguration configuration) {
-    Bounds bounds = this.minecraft.minecraftWindow().bounds();
-    // Mojang calculates the position the same way
-    float x = ((int) bounds.getWidth() - 15) / 2;
-    float y = ((int) bounds.getHeight() - 15) / 2;
-
-    stack.push();
-    int degrees = configuration.rotation().get();
-    if (degrees != 0 && degrees != 360) {
-      float translationX = x + CrosshairCanvas.SIZE / 2.0F;
-      float translationY = y + CrosshairCanvas.SIZE / 2.0F;
-      stack.translate(translationX, translationY, 0);
-      stack.rotate(degrees, 0, 0, 1);
-      stack.translate(translationX * -1, translationY * -1, 0);
-    }
-
-    boolean vanillaBlending = configuration.vanillaBlending().get();
-    if (vanillaBlending) {
-      Laby.gfx().blendSeparate(
-          GFXBlendParameter.ONE_MINUS_DESTINATION_COLOR,
-          GFXBlendParameter.ONE_MINUS_SOURCE_COLOR,
-          GFXBlendParameter.ONE,
-          GFXBlendParameter.ZERO
-      );
-    }
-
-    this.renderCanvas(
-        stack,
-        x,
-        y,
-        vanillaBlending,
-        configuration
+  public void renderVanillaBlended(
+      final Stack stack,
+      final CrosshairCanvas canvas,
+      final float minX,
+      final float minY,
+      final int color
+  ) {
+    Laby.gfx().blendSeparate(
+        GFXBlendParameter.ONE_MINUS_DESTINATION_COLOR,
+        GFXBlendParameter.ONE_MINUS_SOURCE_COLOR,
+        GFXBlendParameter.ONE,
+        GFXBlendParameter.ZERO
     );
 
-    if (vanillaBlending) {
-      Laby.gfx().defaultBlend();
-    }
+    final BatchRectangleRenderer batchRenderer = RECTANGLE_RENDERER.beginBatch(
+        stack,
+        NO_TEXTURED_RECTANGLE_PHASE
+    );
 
-    stack.pop();
+    this.render(batchRenderer, canvas, minX, minY, color);
+    batchRenderer.upload();
+
+    Laby.gfx().defaultBlend();
   }
 
-
-  private void renderCanvas(
-      Stack stack,
-      float minX,
-      float minY,
-      boolean vanillaBlending,
-      CustomCrosshairConfiguration configuration
+  public void renderColored(
+      final Stack stack,
+      final CrosshairCanvas canvas,
+      final float minX,
+      final float minY
   ) {
-    CrosshairCanvasPreset preset = configuration.type().get();
-    CrosshairCanvas canvas = preset.getCanvas();
-    if (canvas == null) {
-      return;
-    }
+    this.renderColored(stack, canvas, minX, minY, DEFAULT_COLOR);
+  }
 
-    boolean[] pixels = canvas.getPixels();
+  public void renderColored(
+      final Stack stack,
+      final CrosshairCanvas canvas,
+      final float minX,
+      final float minY,
+      final int color
+  ) {
+    final BatchRectangleRenderer batchRenderer = RECTANGLE_RENDERER.beginBatch(stack);
+    this.render(batchRenderer, canvas, minX, minY, color);
+    batchRenderer.upload();
+  }
 
-    BatchRectangleRenderer batch;
-    if (vanillaBlending) {
-      batch = RECTANGLE_RENDERER.beginBatch(stack, NO_TEXTURED_RECTANGLE_PHASE);
-    } else {
-      batch = RECTANGLE_RENDERER.beginBatch(stack);
-    }
-
-    int color = vanillaBlending ? DEFAULT_COLOR : this.getColor(configuration);
+  private void render(
+      final BatchRectangleRenderer batchRenderer,
+      final CrosshairCanvas canvas,
+      final float minX,
+      final float minY,
+      final int color
+  ) {
+    final boolean[] pixels = canvas.getPixels();
     for (int x = 0; x < CrosshairCanvas.SIZE; x++) {
       for (int y = 0; y < CrosshairCanvas.SIZE; y++) {
         if (pixels[x + CrosshairCanvas.SIZE * y]) {
-          batch.pos(minX + x, minY + y).size(1, 1).color(color).build();
+          batchRenderer.pos(minX + x, minY + y).size(1, 1).color(color).build();
         }
       }
     }
-
-    batch.upload();
-  }
-
-  private int getColor(CustomCrosshairConfiguration configuration) {
-    Entity targetEntity = this.minecraft.getTargetEntity();
-    if (!configuration.dynamicColor().get() || !(targetEntity instanceof LivingEntity)) {
-      return configuration.color().get().get();
-    }
-
-    if (targetEntity instanceof Player) {
-      return configuration.playerColor().get().get();
-    }
-
-    return ((LivingEntity) targetEntity).isHostile() ? configuration.hostileColor().get().get()
-        : configuration.neutralColor().get().get();
   }
 }

@@ -16,105 +16,140 @@
 
 package net.labymod.addons.customcrosshair.canvas;
 
-public class CrosshairCanvas {
+import java.util.Base64;
+import net.labymod.addons.customcrosshair.misc.Canvas;
 
+public class CrosshairCanvas extends Canvas<CrosshairCanvas> {
+
+  public static final String ENCODED_PREFIX = "LMCH-";
+  public static final String ENCODED_LUNAR_PREFIX = "LCCH-";
   public static final int SIZE = 15;
-  public static final int TOTAL_SIZE = SIZE * SIZE;
-  private static final String X_OUT_OF_BOUNDS = "x is %s but must be smaller than %s";
-  private static final String Y_OUT_OF_BOUNDS = "y is %s but must be smaller than %s";
-  private final boolean[] pixels;
 
   public CrosshairCanvas() {
-    this.pixels = new boolean[TOTAL_SIZE];
+    super(SIZE, SIZE);
   }
 
-  public CrosshairCanvas enablePixel(int pixel) {
-    this.checkTotalRange(pixel);
-    this.pixels[pixel] = true;
-    return this;
-  }
+  public static String encode(final CrosshairCanvas canvas) {
+    final int size = CrosshairCanvas.getSize(canvas);
+    final byte[] bytes = new byte[(int) (Math.ceil(size * size / 8.0F) + 1)];
+    bytes[0] = (byte) size;
 
-  public CrosshairCanvas disablePixel(int pixel) {
-    this.checkTotalRange(pixel);
-    this.pixels[pixel] = false;
-    return this;
-  }
+    final int canvasOffset = (int) Math.floor((SIZE - size) / 2.0F);
+    for (int canvasY = 0; canvasY < size; ++canvasY) {
+      for (int canvasX = 0; canvasX < size; ++canvasX) {
+        final int canvasIndex = canvasX + canvasOffset + (canvasY + canvasOffset) * SIZE;
+        if (!canvas.isPixelActive(canvasIndex)) {
+          continue;
+        }
 
-  public CrosshairCanvas togglePixel(int pixel) {
-    if (this.isPixelActive(pixel)) {
-      this.disablePixel(pixel);
-    } else {
-      this.enablePixel(pixel);
+        final int index = canvasX + canvasY * size;
+        bytes[index / 8 + 1] |= 1 << index % 8;
+      }
     }
 
-    return this;
+    return ENCODED_PREFIX + Base64.getEncoder().encodeToString(bytes);
   }
 
-  public CrosshairCanvas togglePixel(int x, int y) {
-    this.checkRange(x, X_OUT_OF_BOUNDS, x, SIZE);
-    this.checkRange(y, Y_OUT_OF_BOUNDS, y, SIZE);
-    return this.togglePixel(x * y);
+  public static CrosshairCanvas decode(final String encoded) {
+    if (!encoded.startsWith(ENCODED_PREFIX)) {
+      return CrosshairCanvas.decodeLunarCrosshair(encoded);
+    }
+
+    final byte[] bytes = Base64.getDecoder().decode(
+        encoded.substring(ENCODED_PREFIX.length()).getBytes()
+    );
+
+    return CrosshairCanvas.parseEncoded(bytes[0], bytes, 1);
   }
 
-  public CrosshairCanvas enablePixel(int x, int y) {
-    this.checkRange(x, X_OUT_OF_BOUNDS, x, SIZE);
-    this.checkRange(y, Y_OUT_OF_BOUNDS, y, SIZE);
-    return this.enablePixel(x + SIZE * y);
+  public static CrosshairCanvas decodeLunarCrosshair(final String encoded) {
+    if (!encoded.startsWith(ENCODED_LUNAR_PREFIX)) {
+      return null;
+    }
+
+    final String[] split = encoded.trim().split("-");
+    if (split.length != 3) {
+      return null;
+    }
+
+    final int size;
+    try {
+      size = Integer.parseInt(split[1]);
+    } catch (final NumberFormatException e) {
+      return null;
+    }
+
+    final byte[] bytes = Base64.getDecoder().decode(split[2]);
+    return CrosshairCanvas.parseEncoded(size, bytes, 0);
   }
 
-  public CrosshairCanvas enableFromCenter(int x, int y) {
-    int yFromCenter = 7 + y;
-    int xFromCenter = 7 + x;
-    this.checkRange(xFromCenter, X_OUT_OF_BOUNDS, xFromCenter, SIZE);
-    this.checkRange(yFromCenter, Y_OUT_OF_BOUNDS, yFromCenter, SIZE);
-    return this.enablePixel(xFromCenter, yFromCenter);
-  }
+  private static CrosshairCanvas parseEncoded(
+      final int size,
+      final byte[] bytes,
+      final int offset
+  ) {
+    final int canvasOffset = (int) Math.floor((SIZE - size) / 2.0F);
+    final CrosshairCanvas canvas = new CrosshairCanvas();
+    for (int canvasY = 0; canvasY < size; ++canvasY) {
+      for (int canvasX = 0; canvasX < size; ++canvasX) {
+        final int canvasIndex = canvasX + canvasOffset + (canvasY + canvasOffset) * SIZE;
+        if (canvasIndex < 0 || canvasIndex >= SIZE * SIZE) {
+          continue;
+        }
 
-  public CrosshairCanvas disablePixel(int x, int y) {
-    this.checkRange(x, X_OUT_OF_BOUNDS, x, SIZE);
-    this.checkRange(y, Y_OUT_OF_BOUNDS, y, SIZE);
-    return this.disablePixel(x + SIZE * y);
-  }
+        final int index = canvasX + canvasY * size;
+        final int bit = 1 << index % 8;
+        if ((bytes[index / 8 + offset] & bit) != 0) {
+          canvas.enablePixel(canvasIndex);
+        }
+      }
+    }
 
-  public CrosshairCanvas disableFromCenter(int x, int y) {
-    int yFromCenter = 7 + y;
-    int xFromCenter = 7 + x;
-    this.checkRange(xFromCenter, X_OUT_OF_BOUNDS, xFromCenter, SIZE);
-    this.checkRange(yFromCenter, Y_OUT_OF_BOUNDS, yFromCenter, SIZE);
-    return this.disablePixel(xFromCenter, yFromCenter);
-  }
-
-  public boolean isPixelActive(int pixel) {
-    this.checkTotalRange(pixel);
-    return this.pixels[pixel];
-  }
-
-  public boolean isPixelActive(int x, int y) {
-    this.checkRange(x, X_OUT_OF_BOUNDS, x, SIZE);
-    this.checkRange(y, Y_OUT_OF_BOUNDS, y, SIZE);
-    return this.isPixelActive(x * y);
-  }
-
-  public CrosshairCanvas copy() {
-    CrosshairCanvas canvas = new CrosshairCanvas();
-    System.arraycopy(this.pixels, 0, canvas.pixels, 0, this.pixels.length);
     return canvas;
   }
 
-  public boolean[] getPixels() {
-    return this.pixels;
+  private static int getSize(final CrosshairCanvas canvas) {
+    final boolean[] pixels = canvas.getPixels();
+    final int centerX = canvas.getCenterX();
+    final int centerY = canvas.getCenterY();
+
+    int minX = centerX;
+    int maxX = centerX;
+    int minY = centerY;
+    int maxY = centerY;
+    for (int canvasY = 0; canvasY < SIZE; canvasY++) {
+      for (int canvasX = 0; canvasX < SIZE; canvasX++) {
+        if (!pixels[canvasY * SIZE + canvasX]) {
+          continue;
+        }
+
+        if (canvasX < minX) {
+          minX = canvasX;
+        }
+
+        if (canvasX > maxX) {
+          maxX = canvasX;
+        }
+
+        if (canvasY < minY) {
+          minY = canvasY;
+        }
+
+        if (canvasY > maxY) {
+          maxY = canvasY;
+        }
+      }
+    }
+
+    final int horizontalSize = Math.max(centerX - minX, maxX - centerX);
+    final int verticalSize = Math.max(centerY - minY, maxY - centerY);
+    return Math.max(horizontalSize, verticalSize) * 2 + 1;
   }
 
-  private void checkRange(int value, String message, Object... arguments) {
-    if (value < 0 || value >= SIZE) {
-      throw new IllegalArgumentException(String.format(message, arguments));
-    }
-  }
-
-  private void checkTotalRange(int value) {
-    if (value < 0 || value >= TOTAL_SIZE) {
-      throw new IllegalArgumentException(
-          "Pixel " + value + " is out of bounds (min: 0, max: " + TOTAL_SIZE + ")");
-    }
+  @Override
+  public CrosshairCanvas copy() {
+    final CrosshairCanvas canvas = new CrosshairCanvas();
+    this.copyPixelsTo(canvas);
+    return canvas;
   }
 }

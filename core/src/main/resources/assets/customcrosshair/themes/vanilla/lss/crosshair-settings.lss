@@ -1,0 +1,14 @@
+CustomCrosshairSetting {
+  renderer: "Button";
+  min-height: 21;
+  max-height: 21;
+  min-width: 21;
+  max-width: 21;
+
+  CrosshairCanvasRenderer {
+    left: 3;
+    top: 3;
+    height: 15;
+    width: 15;
+  }
+}

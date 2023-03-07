@@ -17,8 +17,6 @@
 package net.labymod.addons.customcrosshair.canvas;
 
 public enum CrosshairCanvasPreset {
-  //SIMPLE(null),
-  //CUSTOM(null),
   DEFAULT(new CrosshairCanvas()
       // vertical line
       .enableFromCenter(0, -4)
@@ -142,13 +140,29 @@ public enum CrosshairCanvasPreset {
   ),
   ;
 
+  private static final CrosshairCanvasPreset[] VALUES = values();
+
   private final CrosshairCanvas canvas;
 
-  CrosshairCanvasPreset(CrosshairCanvas canvas) {
+  CrosshairCanvasPreset(final CrosshairCanvas canvas) {
     this.canvas = canvas;
   }
 
   public CrosshairCanvas getCanvas() {
     return this.canvas;
+  }
+
+  public static CrosshairCanvasPreset of(final CrosshairCanvas canvas) {
+    for (final CrosshairCanvasPreset value : VALUES) {
+      if (value.getCanvas().equals(canvas)) {
+        return value;
+      }
+    }
+
+    return null;
+  }
+
+  public static CrosshairCanvasPreset[] getValues() {
+    return VALUES;
   }
 }

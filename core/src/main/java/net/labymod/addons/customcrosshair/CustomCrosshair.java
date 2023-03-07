@@ -17,11 +17,17 @@
 package net.labymod.addons.customcrosshair;
 
 import net.labymod.addons.customcrosshair.listener.IngameOverlayElementRenderListener;
+import net.labymod.addons.customcrosshair.listener.JsonConfigLoaderInitializeListener;
 import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.models.addon.annotation.AddonMain;
 
 @AddonMain
 public class CustomCrosshair extends LabyAddon<CustomCrosshairConfiguration> {
+
+  @Override
+  protected void preConfigurationLoad() {
+    this.registerListener(new JsonConfigLoaderInitializeListener());
+  }
 
   @Override
   protected void enable() {

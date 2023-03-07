@@ -16,16 +16,18 @@
 
 package net.labymod.addons.customcrosshair;
 
+import net.labymod.addons.customcrosshair.canvas.CrosshairCanvas;
 import net.labymod.addons.customcrosshair.canvas.CrosshairCanvasPreset;
+import net.labymod.addons.customcrosshair.widgets.settings.CustomCrosshairSettingWidget.CanvasSetting;
 import net.labymod.api.addon.AddonConfig;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SliderWidget.SliderSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.color.ColorPickerWidget.ColorPickerSetting;
-import net.labymod.api.client.gui.screen.widget.widgets.input.dropdown.DropdownWidget.DropdownSetting;
 import net.labymod.api.configuration.loader.annotation.ConfigName;
 import net.labymod.api.configuration.loader.property.ConfigProperty;
 import net.labymod.api.configuration.settings.annotation.SettingRequires;
 import net.labymod.api.configuration.settings.annotation.SettingSection;
+import net.labymod.api.property.NotNullPropertyConvention;
 import net.labymod.api.util.Color;
 
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
@@ -35,9 +37,10 @@ public class CustomCrosshairConfiguration extends AddonConfig {
   @SwitchSetting
   private final ConfigProperty<Boolean> enabled = new ConfigProperty<>(true);
 
-  @DropdownSetting
-  private final ConfigProperty<CrosshairCanvasPreset> type = ConfigProperty.createEnum(
-      CrosshairCanvasPreset.DEFAULT
+  @CanvasSetting
+  private final ConfigProperty<CrosshairCanvas> canvas = new ConfigProperty<>(
+      CrosshairCanvasPreset.DEFAULT.getCanvas().copy(),
+      new NotNullPropertyConvention<>(CrosshairCanvasPreset.DEFAULT.getCanvas().copy())
   );
 
   @SwitchSetting
@@ -78,13 +81,30 @@ public class CustomCrosshairConfiguration extends AddonConfig {
       Color.ofRGB(1.0F, 1.0F, 0.0F)
   );
 
+  /*
+   * @deprecated this is used to support the old config format.
+   */
+  @Deprecated
+  private final ConfigProperty<CrosshairCanvasPreset> type = new ConfigProperty<>(
+      CrosshairCanvasPreset.DEFAULT
+  ).addChangeListener((property, oldValue, newValue) -> {
+    if (newValue == null || property.isDefaultValue()) {
+      return;
+    }
+
+    if (this.canvas.isDefaultValue()) {
+      this.canvas.set(newValue.getCanvas().copy());
+      property.set(null);
+    }
+  });
+
   @Override
   public ConfigProperty<Boolean> enabled() {
     return this.enabled;
   }
 
-  public ConfigProperty<CrosshairCanvasPreset> type() {
-    return this.type;
+  public ConfigProperty<CrosshairCanvas> canvas() {
+    return this.canvas;
   }
 
   public ConfigProperty<Boolean> displayInThirdPerson() {

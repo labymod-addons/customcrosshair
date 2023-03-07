@@ -1,0 +1,54 @@
+Scroll {
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  .container {
+    height: fit-content;
+    space-between-entries: 2;
+
+    .title {
+      margin-top: 2;
+    }
+
+    .preset-container {
+      space-between-entries: 1;
+
+      CrosshairCanvasRenderer {
+        renderer: "Button";
+        width: 15;
+        height: 15;
+        padding: 2;
+      }
+    }
+
+    .edit-wrapper {
+      height: fit-content;
+      orientation: horizontal;
+      space-between-entries: 4;
+
+      .input-wrapper {
+        height: fit-content;
+        space-between-entries: 2;
+
+        Button {
+          padding-left: 8;
+          padding-right: 8;
+          min-width: 40;
+        }
+      }
+
+      .edit-canvas {
+        width: 180;
+        height: width;
+        canvas-border-color: rgba(75, 75, 75, 0.4);
+        canvas-active-color: rgba(119, 119, 119, 0.6);
+      }
+    }
+  }
+
+  Scrollbar {
+    width: 4;
+  }
+}

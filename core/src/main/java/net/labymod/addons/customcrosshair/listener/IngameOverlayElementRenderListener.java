@@ -18,7 +18,7 @@ package net.labymod.addons.customcrosshair.listener;
 
 import net.labymod.addons.customcrosshair.CustomCrosshair;
 import net.labymod.addons.customcrosshair.CustomCrosshairConfiguration;
-import net.labymod.addons.customcrosshair.canvas.CrosshairCanvasRenderer;
+import net.labymod.addons.customcrosshair.canvas.CrosshairCanvasIngameRenderer;
 import net.labymod.api.client.Minecraft;
 import net.labymod.api.client.options.Perspective;
 import net.labymod.api.event.Phase;
@@ -29,33 +29,35 @@ import net.labymod.api.event.client.render.overlay.IngameOverlayElementRenderEve
 
 public class IngameOverlayElementRenderListener {
 
-  private final CrosshairCanvasRenderer canvasRenderer;
+  private final CrosshairCanvasIngameRenderer canvasRenderer;
   private final CustomCrosshair addon;
   private final Minecraft minecraft;
 
   public IngameOverlayElementRenderListener(
-      CustomCrosshair addon,
-      Minecraft minecraft
+      final CustomCrosshair addon,
+      final Minecraft minecraft
   ) {
     this.addon = addon;
     this.minecraft = minecraft;
-    this.canvasRenderer = new CrosshairCanvasRenderer(minecraft);
+    this.canvasRenderer = new CrosshairCanvasIngameRenderer(minecraft);
   }
 
   @Subscribe(Priority.LATE)
-  public void onRender(IngameOverlayElementRenderEvent event) {
-    if (event.phase() != Phase.PRE || event.isCancelled()
-        || event.elementType() != OverlayElementType.CROSSHAIR) {
-      return;
-    }
-
-    CustomCrosshairConfiguration configuration = this.addon.configuration();
-    Perspective perspective = this.minecraft.options().perspective();
-    if (perspective != Perspective.FIRST_PERSON && !configuration.displayInThirdPerson().get()) {
+  public void onRender(final IngameOverlayElementRenderEvent event) {
+    if (event.phase() != Phase.PRE
+        || event.isCancelled()
+        || event.elementType() != OverlayElementType.CROSSHAIR
+        || this.minecraft.options().isDebugEnabled()) {
       return;
     }
 
     event.setCancelled(true);
+    final CustomCrosshairConfiguration configuration = this.addon.configuration();
+    final Perspective perspective = this.minecraft.options().perspective();
+    if (perspective != Perspective.FIRST_PERSON && !configuration.displayInThirdPerson().get()) {
+      return;
+    }
+
     this.canvasRenderer.render(event.stack(), configuration);
   }
 }
