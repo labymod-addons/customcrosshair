@@ -56,6 +56,7 @@ public class CrosshairCanvasRenderer {
       final float minY,
       final int color
   ) {
+    Laby.gfx().enableBlend();
     Laby.gfx().blendSeparate(
         GFXBlendParameter.ONE_MINUS_DESTINATION_COLOR,
         GFXBlendParameter.ONE_MINUS_SOURCE_COLOR,
