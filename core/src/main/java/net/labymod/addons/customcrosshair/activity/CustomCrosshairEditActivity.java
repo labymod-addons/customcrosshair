@@ -25,7 +25,6 @@ import net.labymod.addons.customcrosshair.widgets.edit.CrosshairPresetListWidget
 import net.labymod.addons.customcrosshair.widgets.edit.EditCrosshairCanvasWidget;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.gui.lss.style.modifier.attribute.AttributeState;
-import net.labymod.api.client.gui.screen.LabyScreen;
 import net.labymod.api.client.gui.screen.Parent;
 import net.labymod.api.client.gui.screen.activity.Activity;
 import net.labymod.api.client.gui.screen.activity.Link;
@@ -37,7 +36,6 @@ import net.labymod.api.client.gui.screen.widget.widgets.layout.ScrollWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.VerticalListWidget;
 import net.labymod.api.notification.Notification;
 import net.labymod.api.util.concurrent.task.Task;
-import org.jetbrains.annotations.Nullable;
 
 @Link("edit.lss")
 public class CustomCrosshairEditActivity extends Activity {
@@ -178,11 +176,6 @@ public class CustomCrosshairEditActivity extends Activity {
     }).repeat(1, TimeUnit.SECONDS).build();
 
     this.clipboardRefreshTask.executeOnRenderThread();
-  }
-
-  @Override
-  public <T extends LabyScreen> @Nullable T renew() {
-    return new CustomCrosshairEditActivity(this.configuration).generic();
   }
 
   private boolean isValid(final String clipboard) {
