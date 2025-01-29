@@ -17,10 +17,9 @@
 package net.labymod.addons.customcrosshair.canvas;
 
 import net.labymod.api.Laby;
-import net.labymod.api.client.gfx.color.blend.GFXBlendParameter;
+import net.labymod.api.client.gfx.GlConst;
 import net.labymod.api.client.render.draw.RectangleRenderer;
 import net.labymod.api.client.render.draw.batch.BatchRectangleRenderer;
-import net.labymod.api.client.render.gl.GLConstants;
 import net.labymod.api.client.render.matrix.Stack;
 import net.labymod.api.client.render.vertex.phase.RenderPhase;
 import net.labymod.api.client.render.vertex.shard.RenderShards;
@@ -31,7 +30,7 @@ public class CrosshairCanvasRenderer {
   private static final RenderPhase NO_TEXTURED_RECTANGLE_PHASE = RenderPhase.builder()
       .name("rectangle_phase")
       .vertexFormat(Laby.references().oldVertexFormatRegistry().getPositionColor())
-      .mode(GLConstants.QUADS)
+      .mode(GlConst.GL_QUADS)
       .addShard(RenderShards.NO_TEXTURING)
       .build();
 
@@ -58,10 +57,10 @@ public class CrosshairCanvasRenderer {
   ) {
     Laby.gfx().enableBlend();
     Laby.gfx().blendSeparate(
-        GFXBlendParameter.ONE_MINUS_DESTINATION_COLOR,
-        GFXBlendParameter.ONE_MINUS_SOURCE_COLOR,
-        GFXBlendParameter.ONE,
-        GFXBlendParameter.ZERO
+        GlConst.GL_ONE_MINUS_DST_COLOR,
+        GlConst.GL_ONE_MINUS_SRC_COLOR,
+        GlConst.GL_ONE,
+        GlConst.GL_ZERO
     );
 
     final BatchRectangleRenderer batchRenderer = RECTANGLE_RENDERER.beginBatch(

@@ -21,6 +21,7 @@ import net.labymod.addons.customcrosshair.canvas.CrosshairCanvas;
 import net.labymod.api.client.gui.lss.property.LssProperty;
 import net.labymod.api.client.gui.lss.property.annotation.AutoWidget;
 import net.labymod.api.client.gui.mouse.MutableMouse;
+import net.labymod.api.client.gui.screen.ScreenContext;
 import net.labymod.api.client.gui.screen.key.MouseButton;
 import net.labymod.api.client.gui.screen.widget.AbstractWidget;
 import net.labymod.api.client.gui.screen.widget.Widget;
@@ -29,6 +30,7 @@ import net.labymod.api.client.render.draw.RectangleRenderer;
 import net.labymod.api.client.render.draw.batch.BatchRectangleRenderer;
 import net.labymod.api.client.render.matrix.Stack;
 import net.labymod.api.util.ColorUtil;
+import net.labymod.api.util.color.format.ColorFormat;
 
 @AutoWidget
 public class EditCrosshairCanvasWidget extends AbstractWidget<Widget> {
@@ -63,8 +65,8 @@ public class EditCrosshairCanvasWidget extends AbstractWidget<Widget> {
   }
 
   @Override
-  public void renderWidget(final Stack stack, final MutableMouse mouse, final float partialTicks) {
-    super.renderWidget(stack, mouse, partialTicks);
+  public void renderWidget(ScreenContext context) {
+    super.renderWidget(context);
 
     final Bounds bounds = this.bounds();
     final float width = bounds.getWidth();
@@ -72,6 +74,8 @@ public class EditCrosshairCanvasWidget extends AbstractWidget<Widget> {
 
     int x = (int) bounds.getX();
     int y = (int) bounds.getY();
+
+    Stack stack = context.stack();
 
     final int borderColor = this.canvasBorderColor.get();
     final BatchRectangleRenderer batch = this.rectangleRenderer.beginBatch(stack);
@@ -94,7 +98,7 @@ public class EditCrosshairCanvasWidget extends AbstractWidget<Widget> {
         if (index == centerIndex) {
           batch.pos(pixelX, pixelY)
               .size(this.pixelWidth, this.pixelHeight)
-              .color(ColorUtil.toValue(25, 25, 25, 0.1F))
+              .color(ColorFormat.ARGB32.pack(0.098F, 0.098F, 0.098F, 0.1F))
               .build();
         }
 
