@@ -19,10 +19,13 @@ package net.labymod.addons.customcrosshair;
 import net.labymod.addons.customcrosshair.listener.IngameOverlayElementRenderListener;
 import net.labymod.addons.customcrosshair.listener.JsonConfigLoaderInitializeListener;
 import net.labymod.api.addon.LabyAddon;
+import net.labymod.api.client.resources.ResourceLocation;
 import net.labymod.api.models.addon.annotation.AddonMain;
 
 @AddonMain
 public class CustomCrosshair extends LabyAddon<CustomCrosshairConfiguration> {
+
+  public static final String NAMESPACE = "customcrosshair";
 
   @Override
   protected void preConfigurationLoad() {
@@ -42,5 +45,9 @@ public class CustomCrosshair extends LabyAddon<CustomCrosshairConfiguration> {
   @Override
   protected Class<CustomCrosshairConfiguration> configurationClass() {
     return CustomCrosshairConfiguration.class;
+  }
+
+  public static ResourceLocation withDefaultNamespace(String path) {
+    return ResourceLocation.create(NAMESPACE, path);
   }
 }

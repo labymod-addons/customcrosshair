@@ -1,3 +1,5 @@
+import net.labymod.labygradle.common.extension.model.labymod.ReleaseChannel
+
 plugins {
     id("net.labymod.labygradle")
     id("net.labymod.labygradle.addon")
@@ -23,6 +25,7 @@ labyMod {
         author = "LabyMedia GmbH"
         minecraftVersion = "*"
         version = System.getenv().getOrDefault("VERSION", "0.0.1")
+        releaseChannel = ReleaseChannel.create("internal_refactor_renderpipeline")
     }
 }
 

@@ -1,7 +1,7 @@
 rootProject.name = "customcrosshair-addon"
 
 pluginManagement {
-    val labyGradlePluginVersion = "0.5.8-SNAPSHOT"
+    val labyGradlePluginVersion = "0.5.9"
     plugins {
         id("net.labymod.gradle") version (labyGradlePluginVersion)
     }

@@ -16,27 +16,16 @@
 
 package net.labymod.addons.customcrosshair.canvas;
 
+import net.labymod.addons.customcrosshair.CustomCrosshairPrograms;
 import net.labymod.api.Laby;
-import net.labymod.api.client.gfx.GlConst;
 import net.labymod.api.client.render.draw.RectangleRenderer;
 import net.labymod.api.client.render.draw.batch.BatchRectangleRenderer;
 import net.labymod.api.client.render.matrix.Stack;
-import net.labymod.api.client.render.vertex.phase.RenderPhase;
-import net.labymod.api.client.render.vertex.shard.RenderShards;
 import net.labymod.api.util.Color;
 
 public class CrosshairCanvasRenderer {
 
-  private static final RenderPhase NO_TEXTURED_RECTANGLE_PHASE = RenderPhase.builder()
-      .name("rectangle_phase")
-      .vertexFormat(Laby.references().oldVertexFormatRegistry().getPositionColor())
-      .mode(GlConst.GL_QUADS)
-      .addShard(RenderShards.NO_TEXTURING)
-      .build();
-
-  private static final RectangleRenderer RECTANGLE_RENDERER = Laby.labyAPI().renderPipeline()
-      .rectangleRenderer();
-
+  private static final RectangleRenderer RECTANGLE_RENDERER = Laby.references().rectangleRenderer();
   private static final int DEFAULT_COLOR = Color.WHITE.get();
 
   public void renderVanillaBlended(
@@ -55,23 +44,9 @@ public class CrosshairCanvasRenderer {
       final float minY,
       final int color
   ) {
-    Laby.gfx().enableBlend();
-    Laby.gfx().blendSeparate(
-        GlConst.GL_ONE_MINUS_DST_COLOR,
-        GlConst.GL_ONE_MINUS_SRC_COLOR,
-        GlConst.GL_ONE,
-        GlConst.GL_ZERO
-    );
-
-    final BatchRectangleRenderer batchRenderer = RECTANGLE_RENDERER.beginBatch(
-        stack,
-        NO_TEXTURED_RECTANGLE_PHASE
-    );
-
+    final BatchRectangleRenderer batchRenderer = RECTANGLE_RENDERER.beginBatch(stack);
     this.render(batchRenderer, canvas, minX, minY, color);
-    batchRenderer.upload();
-
-    Laby.gfx().defaultBlend();
+    batchRenderer.upload(CustomCrosshairPrograms.VANILLA_BLENDED);
   }
 
   public void renderColored(
