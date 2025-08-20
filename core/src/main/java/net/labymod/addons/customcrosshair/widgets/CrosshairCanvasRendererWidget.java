@@ -20,12 +20,10 @@ import java.util.Objects;
 import net.labymod.addons.customcrosshair.canvas.CrosshairCanvas;
 import net.labymod.addons.customcrosshair.canvas.CrosshairCanvasRenderer;
 import net.labymod.api.client.gui.lss.property.annotation.AutoWidget;
-import net.labymod.api.client.gui.mouse.MutableMouse;
 import net.labymod.api.client.gui.screen.ScreenContext;
 import net.labymod.api.client.gui.screen.widget.AbstractWidget;
 import net.labymod.api.client.gui.screen.widget.Widget;
 import net.labymod.api.client.gui.screen.widget.attributes.bounds.Bounds;
-import net.labymod.api.client.render.matrix.Stack;
 import org.jetbrains.annotations.NotNull;
 
 @AutoWidget
@@ -44,7 +42,7 @@ public class CrosshairCanvasRendererWidget extends AbstractWidget<Widget> {
     final Bounds bounds = this.bounds();
     final float x = bounds.getX();
     final float y = bounds.getY();
-    CANVAS_RENDERER.renderColored(context.stack(), this.canvas, x, y);
+    CANVAS_RENDERER.renderColored(context.canvas(), this.canvas, x, y);
   }
 
   public @NotNull CrosshairCanvasRendererWidget update(@NotNull final CrosshairCanvas canvas) {

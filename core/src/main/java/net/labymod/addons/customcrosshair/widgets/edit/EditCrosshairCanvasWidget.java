@@ -23,6 +23,7 @@ import net.labymod.api.client.gui.lss.property.annotation.AutoWidget;
 import net.labymod.api.client.gui.mouse.MutableMouse;
 import net.labymod.api.client.gui.screen.ScreenContext;
 import net.labymod.api.client.gui.screen.key.MouseButton;
+import net.labymod.api.client.gui.screen.state.ScreenCanvas;
 import net.labymod.api.client.gui.screen.widget.AbstractWidget;
 import net.labymod.api.client.gui.screen.widget.Widget;
 import net.labymod.api.client.gui.screen.widget.attributes.bounds.Bounds;
@@ -75,16 +76,15 @@ public class EditCrosshairCanvasWidget extends AbstractWidget<Widget> {
     int x = (int) bounds.getX();
     int y = (int) bounds.getY();
 
-    Stack stack = context.stack();
-
     final int borderColor = this.canvasBorderColor.get();
-    final BatchRectangleRenderer batch = this.rectangleRenderer.beginBatch(stack);
+
+    ScreenCanvas canvas = context.canvas();
 
     // top line
-    batch.pos(x, y++).size(width, 1).color(borderColor).build();
+    canvas.submitRelativeRect(x, y, width, 1, borderColor);
 
     // left line
-    batch.pos(x++, y).size(1, height - 1).color(borderColor).build();
+    canvas.submitRelativeRect(x++, y, 1, height - 1, borderColor);
 
     final int size = CrosshairCanvas.SIZE;
     final int centerIndex = this.canvas.getCenterX() + size * this.canvas.getCenterY();
@@ -96,28 +96,32 @@ public class EditCrosshairCanvasWidget extends AbstractWidget<Widget> {
         final float pixelY = y + canvasY * this.pixelHeight;
         final int index = canvasX + size * canvasY;
         if (index == centerIndex) {
-          batch.pos(pixelX, pixelY)
-              .size(this.pixelWidth, this.pixelHeight)
-              .color(ColorFormat.ARGB32.pack(0.098F, 0.098F, 0.098F, 0.1F))
-              .build();
+          canvas.submitRelativeRect(
+              pixelX, pixelY,
+              this.pixelWidth, this.pixelHeight,
+              ColorFormat.ARGB32.pack(0.098F, 0.098F, 0.098F, 0.1F)
+          );
         }
 
         if (pixels[index]) {
-          batch.pos(pixelX, pixelY)
-              .size(this.pixelWidth, this.pixelHeight)
-              .color(activeColor)
-              .build();
+          canvas.submitRelativeRect(
+              pixelX, pixelY,
+              this.pixelWidth, this.pixelHeight,
+              activeColor
+          );
         }
 
-        batch.pos(pixelX + this.pixelWidth, pixelY)
-            .size(1, this.pixelHeight + 1)
-            .color(borderColor)
-            .build();
+        canvas.submitRelativeRect(
+            pixelX + this.pixelWidth, pixelY,
+            1, this.pixelHeight + 1,
+            borderColor
+        );
 
-        batch.pos(pixelX, pixelY + this.pixelHeight)
-            .size(this.pixelWidth, 1)
-            .color(borderColor)
-            .build();
+        canvas.submitRelativeRect(
+            pixelX, pixelY + this.pixelHeight,
+            this.pixelWidth, 1,
+            borderColor
+        );
 
         if (canvasX == size - 1) {
           x = (int) bounds.getX() + 1;
@@ -127,8 +131,6 @@ public class EditCrosshairCanvasWidget extends AbstractWidget<Widget> {
         }
       }
     }
-
-    batch.upload();
   }
 
   @Override

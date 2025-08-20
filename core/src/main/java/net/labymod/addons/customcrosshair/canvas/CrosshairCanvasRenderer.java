@@ -18,6 +18,7 @@ package net.labymod.addons.customcrosshair.canvas;
 
 import net.labymod.addons.customcrosshair.CustomCrosshairPrograms;
 import net.labymod.api.Laby;
+import net.labymod.api.client.gui.screen.state.ScreenCanvas;
 import net.labymod.api.client.render.draw.RectangleRenderer;
 import net.labymod.api.client.render.draw.batch.BatchRectangleRenderer;
 import net.labymod.api.client.render.matrix.Stack;
@@ -82,6 +83,42 @@ public class CrosshairCanvasRenderer {
       for (int y = 0; y < CrosshairCanvas.SIZE; y++) {
         if (pixels[x + CrosshairCanvas.SIZE * y]) {
           batchRenderer.pos(minX + x, minY + y).size(1, 1).color(color).build();
+        }
+      }
+    }
+  }
+
+  public void renderColored(
+      final ScreenCanvas screenCanvas,
+      final CrosshairCanvas canvas,
+      final float minX,
+      final float minY
+  ) {
+    this.renderColored(screenCanvas, canvas, minX, minY, DEFAULT_COLOR);
+  }
+
+  public void renderColored(
+      final ScreenCanvas screenCanvas,
+      final CrosshairCanvas canvas,
+      final float minX,
+      final float minY,
+      final int color
+  ) {
+    this.render(screenCanvas, canvas, minX, minY, color);
+  }
+
+  private void render(
+      final ScreenCanvas screenCanvas,
+      final CrosshairCanvas canvas,
+      final float minX,
+      final float minY,
+      final int color
+  ) {
+    final boolean[] pixels = canvas.getPixels();
+    for (int x = 0; x < CrosshairCanvas.SIZE; x++) {
+      for (int y = 0; y < CrosshairCanvas.SIZE; y++) {
+        if (pixels[x + CrosshairCanvas.SIZE * y]) {
+          screenCanvas.submitRelativeRect(minX + x, minY + y, 1, 1, color);
         }
       }
     }
