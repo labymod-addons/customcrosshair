@@ -21,6 +21,8 @@ import net.labymod.api.client.Minecraft;
 import net.labymod.api.client.entity.Entity;
 import net.labymod.api.client.entity.LivingEntity;
 import net.labymod.api.client.entity.player.Player;
+import net.labymod.api.client.gui.screen.ScreenContext;
+import net.labymod.api.client.gui.screen.state.ScreenCanvas;
 import net.labymod.api.client.gui.screen.widget.attributes.bounds.Bounds;
 import net.labymod.api.client.render.matrix.Stack;
 
@@ -32,12 +34,13 @@ public class CrosshairCanvasIngameRenderer extends CrosshairCanvasRenderer {
     this.minecraft = minecraft;
   }
 
-  public void render(final Stack stack, final CustomCrosshairConfiguration configuration) {
+  public void render(final ScreenContext context, final CustomCrosshairConfiguration configuration) {
     final Bounds bounds = this.minecraft.minecraftWindow().bounds();
     // Mojang calculates the position the same way
     final float x = (int) ((bounds.getWidth() - 15) / 2F);
     final float y = (int) ((bounds.getHeight() - 15) / 2F);
 
+    Stack stack = context.stack();
     stack.push();
     final int degrees = configuration.rotation().get();
     if (degrees != 0 && degrees != 360) {
@@ -48,19 +51,17 @@ public class CrosshairCanvasIngameRenderer extends CrosshairCanvasRenderer {
       stack.translate(translationX * -1, translationY * -1, 0);
     }
 
-    this.renderCanvas(
-        stack,
-        configuration,
-        x,
-        y
-    );
+    ScreenCanvas canvas = context.canvas();
+    canvas.down();
+    this.renderCanvas(context, configuration, x, y);
+    canvas.up();
 
     stack.pop();
   }
 
 
   private void renderCanvas(
-      final Stack stack,
+      final ScreenContext context,
       final CustomCrosshairConfiguration configuration,
       final float minX,
       final float minY
@@ -71,11 +72,11 @@ public class CrosshairCanvasIngameRenderer extends CrosshairCanvasRenderer {
     }
 
     if (configuration.vanillaBlending().get()) {
-      this.renderVanillaBlended(stack, canvas, minX, minY);
+      this.renderVanillaBlended(context.canvas(), canvas, minX, minY);
       return;
     }
 
-    this.renderColored(stack, canvas, minX, minY, this.getColor(configuration));
+    this.renderColored(context.canvas(), canvas, minX, minY, this.getColor(configuration));
   }
 
   private int getColor(final CustomCrosshairConfiguration configuration) {

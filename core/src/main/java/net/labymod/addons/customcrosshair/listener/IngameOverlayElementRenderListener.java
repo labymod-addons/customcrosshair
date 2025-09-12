@@ -20,6 +20,7 @@ import net.labymod.addons.customcrosshair.CustomCrosshair;
 import net.labymod.addons.customcrosshair.CustomCrosshairConfiguration;
 import net.labymod.addons.customcrosshair.canvas.CrosshairCanvasIngameRenderer;
 import net.labymod.api.client.Minecraft;
+import net.labymod.api.client.gui.screen.ScreenContext;
 import net.labymod.api.client.options.Perspective;
 import net.labymod.api.event.Phase;
 import net.labymod.api.event.Priority;
@@ -58,6 +59,7 @@ public class IngameOverlayElementRenderListener {
       return;
     }
 
-    this.canvasRenderer.render(event.stack(), configuration);
+    ScreenContext screenContext = event.screenContext();
+    this.canvasRenderer.render(screenContext, configuration);
   }
 }

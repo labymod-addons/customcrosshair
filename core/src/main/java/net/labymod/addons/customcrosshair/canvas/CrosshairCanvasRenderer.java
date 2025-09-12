@@ -17,72 +17,53 @@
 package net.labymod.addons.customcrosshair.canvas;
 
 import net.labymod.addons.customcrosshair.CustomCrosshairPrograms;
-import net.labymod.api.Laby;
+import net.labymod.api.Textures;
 import net.labymod.api.client.gui.screen.state.ScreenCanvas;
-import net.labymod.api.client.render.draw.RectangleRenderer;
-import net.labymod.api.client.render.draw.batch.BatchRectangleRenderer;
-import net.labymod.api.client.render.matrix.Stack;
+import net.labymod.api.client.gui.screen.state.states.GuiTextureSet;
 import net.labymod.api.util.Color;
 
 public class CrosshairCanvasRenderer {
 
-  private static final RectangleRenderer RECTANGLE_RENDERER = Laby.references().rectangleRenderer();
   private static final int DEFAULT_COLOR = Color.WHITE.get();
 
   public void renderVanillaBlended(
-      final Stack stack,
-      final CrosshairCanvas canvas,
+      final ScreenCanvas screenCanvas,
+      final CrosshairCanvas crosshairCanvas,
       final float minX,
       final float minY
   ) {
-    this.renderVanillaBlended(stack, canvas, minX, minY, DEFAULT_COLOR);
+    this.renderVanillaBlended(screenCanvas, crosshairCanvas, minX, minY, DEFAULT_COLOR);
   }
 
   public void renderVanillaBlended(
-      final Stack stack,
-      final CrosshairCanvas canvas,
+      final ScreenCanvas screenCanvas,
+      final CrosshairCanvas crosshairCanvas,
       final float minX,
       final float minY,
       final int color
   ) {
-    final BatchRectangleRenderer batchRenderer = RECTANGLE_RENDERER.beginBatch(stack);
-    this.render(batchRenderer, canvas, minX, minY, color);
-    batchRenderer.upload(CustomCrosshairPrograms.VANILLA_BLENDED);
-  }
-
-  public void renderColored(
-      final Stack stack,
-      final CrosshairCanvas canvas,
-      final float minX,
-      final float minY
-  ) {
-    this.renderColored(stack, canvas, minX, minY, DEFAULT_COLOR);
-  }
-
-  public void renderColored(
-      final Stack stack,
-      final CrosshairCanvas canvas,
-      final float minX,
-      final float minY,
-      final int color
-  ) {
-    final BatchRectangleRenderer batchRenderer = RECTANGLE_RENDERER.beginBatch(stack);
-    this.render(batchRenderer, canvas, minX, minY, color);
-    batchRenderer.upload();
+    this.render(screenCanvas, crosshairCanvas, minX, minY, color);
   }
 
   private void render(
-      final BatchRectangleRenderer batchRenderer,
-      final CrosshairCanvas canvas,
+      final ScreenCanvas screenCanvas,
+      final CrosshairCanvas crosshairCanvas,
       final float minX,
       final float minY,
       final int color
   ) {
-    final boolean[] pixels = canvas.getPixels();
+    final GuiTextureSet textureSet = GuiTextureSet.single(Textures.WHITE);
+    final boolean[] pixels = crosshairCanvas.getPixels();
     for (int x = 0; x < CrosshairCanvas.SIZE; x++) {
       for (int y = 0; y < CrosshairCanvas.SIZE; y++) {
         if (pixels[x + CrosshairCanvas.SIZE * y]) {
-          batchRenderer.pos(minX + x, minY + y).size(1, 1).color(color).build();
+          screenCanvas.submitGuiBlit(
+              CustomCrosshairPrograms.VANILLA_BLENDED,
+              textureSet,
+              minX + x, minY + y, 1, 1,
+              0.0F, 0.0F, 1.0F, 1.0F,
+              color
+          );
         }
       }
     }
@@ -98,16 +79,6 @@ public class CrosshairCanvasRenderer {
   }
 
   public void renderColored(
-      final ScreenCanvas screenCanvas,
-      final CrosshairCanvas canvas,
-      final float minX,
-      final float minY,
-      final int color
-  ) {
-    this.render(screenCanvas, canvas, minX, minY, color);
-  }
-
-  private void render(
       final ScreenCanvas screenCanvas,
       final CrosshairCanvas canvas,
       final float minX,
