@@ -27,6 +27,7 @@ import net.labymod.api.event.Priority;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.render.overlay.IngameOverlayElementRenderEvent;
 import net.labymod.api.event.client.render.overlay.IngameOverlayElementRenderEvent.OverlayElementType;
+import net.labymod.api.event.client.render.world.RenderWorldEvent;
 
 public class IngameOverlayElementRenderListener {
 
@@ -45,21 +46,21 @@ public class IngameOverlayElementRenderListener {
 
   @Subscribe(Priority.LATE)
   public void onRender(final IngameOverlayElementRenderEvent event) {
-    if (event.phase() != Phase.PRE
-        || event.isCancelled()
-        || event.elementType() != OverlayElementType.CROSSHAIR
-        || this.minecraft.options().isDebugEnabled()) {
+    if (event.phase() != Phase.PRE || this.minecraft.options().isDebugEnabled()) {
       return;
     }
 
-    event.setCancelled(true);
-    final CustomCrosshairConfiguration configuration = this.addon.configuration();
-    final Perspective perspective = this.minecraft.options().perspective();
-    if (perspective != Perspective.FIRST_PERSON && !configuration.displayInThirdPerson().get()) {
-      return;
-    }
+    if (event.elementType() == OverlayElementType.CROSSHAIR) {
+      event.setCancelled(true);
+    } else if (event.elementType() == OverlayElementType.BOSS_BAR) { //Workaround: the crosshair won't render if the player is in third person, but boss bars are always visible (even when no boss bar is present).
+      final CustomCrosshairConfiguration configuration = this.addon.configuration();
+      final Perspective perspective = this.minecraft.options().perspective();
+      if (perspective != Perspective.FIRST_PERSON && !configuration.displayInThirdPerson().get()) {
+        return;
+      }
 
-    ScreenContext screenContext = event.screenContext();
-    this.canvasRenderer.render(screenContext, configuration);
+      ScreenContext screenContext = event.screenContext();
+      this.canvasRenderer.render(screenContext, configuration);
+    }
   }
 }
