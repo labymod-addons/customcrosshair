@@ -28,9 +28,11 @@ import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.render.overlay.IngameOverlayElementRenderEvent;
 import net.labymod.api.event.client.render.overlay.IngameOverlayElementRenderEvent.OverlayElementType;
 import net.labymod.api.event.client.render.world.RenderWorldEvent;
+import net.labymod.api.loader.MinecraftVersions;
 
 public class IngameOverlayElementRenderListener {
 
+  private static final boolean V1_8_9_WORKAROUND = MinecraftVersions.V1_8_9.orOlder();
   private final CrosshairCanvasIngameRenderer canvasRenderer;
   private final CustomCrosshair addon;
   private final Minecraft minecraft;
@@ -50,17 +52,29 @@ public class IngameOverlayElementRenderListener {
       return;
     }
 
-    if (event.elementType() == OverlayElementType.CROSSHAIR) {
-      event.setCancelled(true);
-    } else if (event.elementType() == OverlayElementType.BOSS_BAR) { //Workaround: the crosshair won't render if the player is in third person, but boss bars are always visible (even when no boss bar is present).
-      final CustomCrosshairConfiguration configuration = this.addon.configuration();
-      final Perspective perspective = this.minecraft.options().perspective();
-      if (perspective != Perspective.FIRST_PERSON && !configuration.displayInThirdPerson().get()) {
-        return;
+    ScreenContext context = event.screenContext();
+    if (V1_8_9_WORKAROUND) {
+      if (event.elementType() == OverlayElementType.CROSSHAIR) {
+        event.setCancelled(true);
+        this.renderCustomCrosshair(context);
       }
-
-      ScreenContext screenContext = event.screenContext();
-      this.canvasRenderer.render(screenContext, configuration);
+    } else {
+      if (event.elementType() == OverlayElementType.CROSSHAIR) {
+        event.setCancelled(true);
+      } else if (event.elementType() == OverlayElementType.BOSS_BAR) { //Workaround: the crosshair won't render if the player is in third person, but boss bars are always visible (even when no boss bar is present).
+        this.renderCustomCrosshair(context);
+      }
     }
+  }
+
+  private void renderCustomCrosshair(ScreenContext context) {
+    final CustomCrosshairConfiguration configuration = this.addon.configuration();
+    final Perspective perspective = this.minecraft.options().perspective();
+    if (perspective != Perspective.FIRST_PERSON && !configuration.displayInThirdPerson()
+        .get()) {
+      return;
+    }
+
+    this.canvasRenderer.render(context, configuration);
   }
 }
