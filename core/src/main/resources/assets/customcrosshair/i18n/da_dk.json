@@ -15,6 +15,9 @@
                 "coloring": {
                     "name": "Farver"
                 }
+            },
+            "canvas": {
+                "name": "Rediger sigtekorn"
             }
         }
     }
