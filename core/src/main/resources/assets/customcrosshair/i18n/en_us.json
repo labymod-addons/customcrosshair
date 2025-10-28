@@ -20,6 +20,12 @@
       "color": {
         "name": "Color"
       },
+      "outlineThickness": {
+        "name": "Outline Thickness"
+      },
+      "outlineColor": {
+        "name": "Outline Color"
+      },
       "dynamicColor": {
         "name": "Dynamic Color"
       },

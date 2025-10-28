@@ -76,7 +76,8 @@ public class CrosshairCanvasIngameRenderer extends CrosshairCanvasRenderer {
       return;
     }
 
-    this.renderColored(context.canvas(), canvas, minX, minY, this.getColor(configuration));
+    this.renderColored(context.canvas(), canvas, minX, minY, this.getColor(configuration),
+            configuration.outlineThickness().get(), configuration.outlineColor().get().get());
   }
 
   private int getColor(final CustomCrosshairConfiguration configuration) {

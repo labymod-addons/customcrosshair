@@ -60,6 +60,14 @@ public class CustomCrosshairConfiguration extends AddonConfig {
   );
 
   @SettingRequires(value = "vanillaBlending", invert = true)
+  @SliderSetting(min = 0, max = 4)
+  private final ConfigProperty<Integer> outlineThickness = new ConfigProperty<>(0);
+
+  @SettingRequires(value = "vanillaBlending", invert = true)
+  @ColorPickerSetting
+  private final ConfigProperty<Color> outlineColor = new ConfigProperty<>(Color.BLACK);
+
+  @SettingRequires(value = "vanillaBlending", invert = true)
   @SwitchSetting
   private final ConfigProperty<Boolean> dynamicColor = new ConfigProperty<>(false);
 
@@ -121,6 +129,14 @@ public class CustomCrosshairConfiguration extends AddonConfig {
 
   public ConfigProperty<Color> color() {
     return this.color;
+  }
+
+  public ConfigProperty<Integer> outlineThickness() {
+    return this.outlineThickness;
+  }
+
+  public ConfigProperty<Color> outlineColor() {
+    return this.outlineColor;
   }
 
   public ConfigProperty<Boolean> dynamicColor() {
