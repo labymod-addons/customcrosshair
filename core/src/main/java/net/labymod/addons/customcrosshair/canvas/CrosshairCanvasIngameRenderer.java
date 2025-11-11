@@ -25,9 +25,11 @@ import net.labymod.api.client.gui.screen.ScreenContext;
 import net.labymod.api.client.gui.screen.state.ScreenCanvas;
 import net.labymod.api.client.gui.screen.widget.attributes.bounds.Bounds;
 import net.labymod.api.client.render.matrix.Stack;
+import net.labymod.api.loader.MinecraftVersions;
 
 public class CrosshairCanvasIngameRenderer extends CrosshairCanvasRenderer {
 
+  private static final boolean LEGACY_POSITION = MinecraftVersions.V1_15_2.orOlder();
   private final Minecraft minecraft;
 
   public CrosshairCanvasIngameRenderer(final Minecraft minecraft) {
@@ -36,9 +38,16 @@ public class CrosshairCanvasIngameRenderer extends CrosshairCanvasRenderer {
 
   public void render(final ScreenContext context, final CustomCrosshairConfiguration configuration) {
     final Bounds bounds = this.minecraft.minecraftWindow().bounds();
-    // Mojang calculates the position the same way
-    final float x = (int) ((bounds.getWidth() - 15) / 2F);
-    final float y = (int) ((bounds.getHeight() - 15) / 2F);
+    // Mojang calculates the position the same way, but the formula is different between versions
+    final int x;
+    final int y;
+    if (!LEGACY_POSITION) {
+      x = (int) ((bounds.getWidth() - 15) / 2F);
+      y = (int) ((bounds.getHeight() - 15) / 2F);
+    } else {
+      x = (int) bounds.getWidth() / 2 - 7;
+      y = (int) bounds.getHeight() / 2 - 7;
+    }
 
     Stack stack = context.stack();
     stack.push();
