@@ -1,1 +1,22 @@
-{}
+{
+    "customcrosshair": {
+        "settings": {
+            "name": "Aangepaste kruisrichting",
+            "enabled": {
+                "name": "Ingeschakeld"
+            },
+            "canvas": {
+                "name": "Kruisdraad bewerken"
+            },
+            "displayInThirdPerson": {
+                "name": "Weergeven in derde persoon"
+            },
+            "rotation": {
+                "name": "Rotatie"
+            },
+            "vanillaBlending": {
+                "name": "Standaardvermenging"
+            }
+        }
+    }
+}
