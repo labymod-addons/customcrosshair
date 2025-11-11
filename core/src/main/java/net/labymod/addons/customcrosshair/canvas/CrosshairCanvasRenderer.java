@@ -75,7 +75,7 @@ public class CrosshairCanvasRenderer {
       final float minX,
       final float minY
   ) {
-    this.renderColored(screenCanvas, canvas, minX, minY, DEFAULT_COLOR);
+    this.renderColored(screenCanvas, canvas, minX, minY, DEFAULT_COLOR, 0, 0);
   }
 
   public void renderColored(
@@ -83,9 +83,21 @@ public class CrosshairCanvasRenderer {
       final CrosshairCanvas canvas,
       final float minX,
       final float minY,
-      final int color
+      final int color,
+      final int outlineThickness,
+      final int outlineColor
   ) {
     final boolean[] pixels = canvas.getPixels();
+    if (outlineThickness > 0) {
+      for (int x = 0; x < CrosshairCanvas.SIZE; x++) {
+        for (int y = 0; y < CrosshairCanvas.SIZE; y++) {
+          if (pixels[x + CrosshairCanvas.SIZE * y]) {
+            screenCanvas.submitRelativeOutlineRect(minX + x, minY + y, 1, 1, outlineThickness,
+                    outlineColor, outlineColor);
+          }
+        }
+      }
+    }
     for (int x = 0; x < CrosshairCanvas.SIZE; x++) {
       for (int y = 0; y < CrosshairCanvas.SIZE; y++) {
         if (pixels[x + CrosshairCanvas.SIZE * y]) {
