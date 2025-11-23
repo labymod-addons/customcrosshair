@@ -1,1 +1,21 @@
-{}
+{
+    "customcrosshair": {
+        "settings": {
+            "enabled": {
+                "name": "Aktif"
+            },
+            "canvas": {
+                "name": "İmleci Düzenle"
+            },
+            "displayInThirdPerson": {
+                "name": "Üçüncü Şahısta Göster"
+            },
+            "rotation": {
+                "name": "Rotasyon"
+            },
+            "color": {
+                "name": "Renk"
+            }
+        }
+    }
+}
