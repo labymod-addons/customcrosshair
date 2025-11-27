@@ -16,6 +16,24 @@
             },
             "vanillaBlending": {
                 "name": "Vanille vermenging"
+            },
+            "color": {
+                "name": "Kleur"
+            },
+            "outlineThickness": {
+                "name": "Omlijningsdikte"
+            },
+            "outlineColor": {
+                "name": "Omlijningskleur"
+            },
+            "dynamicColor": {
+                "name": "Dynamische kleur"
+            },
+            "neutralColor": {
+                "name": "Neutrale kleur"
+            },
+            "hostileColor": {
+                "name": "Vijandige kleur"
             }
         }
     }
