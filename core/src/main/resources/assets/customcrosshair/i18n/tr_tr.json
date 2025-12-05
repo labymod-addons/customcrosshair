@@ -62,7 +62,13 @@
         },
         "notification": {
             "share": {
-                "copied": "Nişangah panona kopyalandı."
+                "copied": "Nişangah panona kopyalandı.",
+                "error": "Tanımlayıcı oluşturulurken bir sorun oluştu. Lütfen kayıtlarını kontrol et."
+            },
+            "import": {
+                "success": "Nişangahınız panonuzdan başarıyla içe aktarıldı.",
+                "invalid": "Panonuzda geçerli bir İmleç tanımlayıcısı bulunamadı.",
+                "error": "İmleç içe aktarılırken bir hata oluştu."
             }
         }
     }
