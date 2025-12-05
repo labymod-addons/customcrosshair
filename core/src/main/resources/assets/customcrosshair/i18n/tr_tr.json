@@ -39,6 +39,9 @@
                 "coloring": {
                     "name": "Renkler"
                 }
+            },
+            "vanillaBlending": {
+                "name": "Vanilla Karışımı"
             }
         },
         "activity": {
@@ -50,7 +53,16 @@
                 "share": {
                     "name": "Paylaşmak",
                     "description": "Mevcut nişangahın benzersiz kimliğini panoya kopyala. Diğer oyuncular bu kimliği kullanarak nişangahını içe aktarabilir."
+                },
+                "import": {
+                    "name": "İçe Aktarmak",
+                    "description": "Benzersiz tanımlayıcısına göre bir nişangah içe aktar. Düğme devre dışıysa, panonda geçerli bir tanımlayıcı bulunamadı."
                 }
+            }
+        },
+        "notification": {
+            "share": {
+                "copied": "Nişangah panona kopyalandı."
             }
         }
     }
