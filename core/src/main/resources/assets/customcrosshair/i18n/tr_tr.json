@@ -46,7 +46,11 @@
                 "title": "Ön Ayarlar"
             },
             "edit": {
-                "title": "Özelleştirmek"
+                "title": "Özelleştirmek",
+                "share": {
+                    "name": "Paylaşmak",
+                    "description": "Mevcut nişangahın benzersiz kimliğini panoya kopyala. Diğer oyuncular bu kimliği kullanarak nişangahını içe aktarabilir."
+                }
             }
         }
     }
