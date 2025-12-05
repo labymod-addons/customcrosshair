@@ -18,6 +18,33 @@
             },
             "canvas": {
                 "name": "Rediger sigtekorn"
+            },
+            "dynamicColor": {
+                "name": "Dynamisk farve"
+            },
+            "neutralColor": {
+                "name": "Neutral farve"
+            },
+            "playerColor": {
+                "name": "Spillerfarve"
+            }
+        },
+        "activity": {
+            "presets": {
+                "title": "Forudindstillinger"
+            },
+            "edit": {
+                "share": {
+                    "name": "Del"
+                },
+                "import": {
+                    "name": "Importer"
+                }
+            }
+        },
+        "notification": {
+            "import": {
+                "success": "Crosshairet blev importeret fra din udklipsholder."
             }
         }
     }
