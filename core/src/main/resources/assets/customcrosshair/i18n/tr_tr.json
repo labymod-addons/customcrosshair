@@ -15,6 +15,30 @@
             },
             "color": {
                 "name": "Renk"
+            },
+            "outlineThickness": {
+                "name": "Kenar Çizgisi kalınlığı"
+            },
+            "name": "Özel İmleç",
+            "outlineColor": {
+                "name": "Kenar Çizgisi Rengi"
+            },
+            "dynamicColor": {
+                "name": "Dinamik Renk"
+            },
+            "neutralColor": {
+                "name": "Nötr Renk"
+            },
+            "hostileColor": {
+                "name": "Düşman Rengi"
+            },
+            "playerColor": {
+                "name": "Oyuncu Rengi"
+            },
+            "header": {
+                "coloring": {
+                    "name": "Renkler"
+                }
             }
         }
     }
