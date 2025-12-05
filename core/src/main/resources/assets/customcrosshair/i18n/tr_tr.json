@@ -40,6 +40,14 @@
                     "name": "Renkler"
                 }
             }
+        },
+        "activity": {
+            "presets": {
+                "title": "Ön Ayarlar"
+            },
+            "edit": {
+                "title": "Özelleştirmek"
+            }
         }
     }
 }
