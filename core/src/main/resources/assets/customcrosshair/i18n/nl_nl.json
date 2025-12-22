@@ -37,6 +37,16 @@
             },
             "playerColor": {
                 "name": "Speler Kleur"
+            },
+            "header": {
+                "coloring": {
+                    "name": "Kleuren"
+                }
+            }
+        },
+        "activity": {
+            "edit": {
+                "title": "Personalizeren"
             }
         }
     }
