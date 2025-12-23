@@ -30,6 +30,12 @@
             },
             "displayInThirdPerson": {
                 "name": "Vis i tredje person"
+            },
+            "vanillaBlending": {
+                "name": "Vaniljeblanding"
+            },
+            "outlineThickness": {
+                "name": "Omridstykkelse"
             }
         },
         "activity": {
