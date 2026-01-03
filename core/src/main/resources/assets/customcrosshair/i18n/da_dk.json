@@ -27,6 +27,9 @@
             },
             "playerColor": {
                 "name": "Spillerfarve"
+            },
+            "displayInThirdPerson": {
+                "name": "Vis i tredje person"
             }
         },
         "activity": {
