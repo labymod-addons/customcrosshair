@@ -36,6 +36,9 @@
             },
             "outlineThickness": {
                 "name": "Omridstykkelse"
+            },
+            "outlineColor": {
+                "name": "Omridsfarve"
             }
         },
         "activity": {
