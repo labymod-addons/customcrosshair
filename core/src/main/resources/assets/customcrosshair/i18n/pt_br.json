@@ -1,1 +1,12 @@
-{}
+{
+    "customcrosshair": {
+        "settings": {
+            "enabled": {
+                "name": "Ativado"
+            },
+            "canvas": {
+                "name": "Editar Mira"
+            }
+        }
+    }
+}
