@@ -1,1 +1,19 @@
-{}
+{
+    "customcrosshair": {
+        "settings": {
+            "name": "CustomCrosshair",
+            "enabled": {
+                "name": "Włączone"
+            },
+            "canvas": {
+                "name": "Edytuj celownik"
+            },
+            "displayInThirdPerson": {
+                "name": "Wyświetlaj w trzeciej osobie"
+            },
+            "rotation": {
+                "name": "Obrót"
+            }
+        }
+    }
+}
