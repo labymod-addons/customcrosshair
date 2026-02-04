@@ -6,6 +6,9 @@
             },
             "canvas": {
                 "name": "Editar Mira"
+            },
+            "rotation": {
+                "name": "Rotação"
             }
         }
     }
