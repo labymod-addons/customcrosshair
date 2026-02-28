@@ -12,6 +12,11 @@
             },
             "color": {
                 "name": "Cor"
+            },
+            "header": {
+                "coloring": {
+                    "name": "Cores"
+                }
             }
         }
     }
