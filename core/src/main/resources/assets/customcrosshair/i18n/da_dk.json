@@ -39,6 +39,9 @@
             },
             "outlineColor": {
                 "name": "Omridsfarve"
+            },
+            "hostileColor": {
+                "name": "Fjendtlig farve"
             }
         },
         "activity": {
