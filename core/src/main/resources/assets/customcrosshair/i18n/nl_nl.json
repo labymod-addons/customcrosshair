@@ -46,7 +46,29 @@
         },
         "activity": {
             "edit": {
-                "title": "Personalizeren"
+                "title": "Personalizeren",
+                "share": {
+                    "name": "Delen",
+                    "description": "Kopieer de unieke identificatie van het huidige vizier naar je klembord. Andere spelers kunnen deze identificatie gebruiken om je vizier te importeren."
+                },
+                "import": {
+                    "name": "Importeren",
+                    "description": "Importeer een vizier op basis van de unieke identificatie. Als de knop is uitgeschakeld, is er geen geldige identificatie in je klembord gevonden."
+                }
+            },
+            "presets": {
+                "title": "Voorinstellingen"
+            }
+        },
+        "notification": {
+            "share": {
+                "copied": "Het vizier is naar je klembord gekopieerd.",
+                "error": "Er is iets misgegaan bij het genereren van de identificatie. Controleer je logs."
+            },
+            "import": {
+                "success": "Het vizier is succesvol geïmporteerd vanuit je klembord.",
+                "invalid": "Er is geen geldige vizier-identificatie in je klembord gevonden.",
+                "error": "Er is een fout opgetreden bij het importeren van het vizier."
             }
         }
     }
