@@ -50,11 +50,14 @@
             },
             "edit": {
                 "share": {
-                    "name": "Del"
+                    "name": "Del",
+                    "description": "Kopiér den unikke identifikator for det aktuelle sigtekorn til dit udklipsholder. Andre spillere kan bruge denne identifikator til at importere dit sigtekorn."
                 },
                 "import": {
-                    "name": "Importer"
-                }
+                    "name": "Importer",
+                    "description": "Importer et sigtekorn baseret på dets unikke identifikator. Hvis knappen er deaktiveret, blev der ikke fundet nogen gyldig identifikator på dit udklipsholder."
+                },
+                "title": "Brugerdefinér"
             }
         },
         "notification": {
