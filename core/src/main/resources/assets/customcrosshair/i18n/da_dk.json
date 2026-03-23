@@ -59,7 +59,7 @@
         },
         "notification": {
             "import": {
-                "success": "Crosshairet blev importeret fra din udklipsholder."
+                "success": "Sigtekornet blev importeret fra din udklipsholder."
             }
         }
     }
