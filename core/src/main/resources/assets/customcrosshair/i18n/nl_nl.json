@@ -67,7 +67,7 @@
             },
             "import": {
                 "success": "Het vizier is succesvol geïmporteerd vanuit je klembord.",
-                "invalid": "Er is geen geldige vizier-identificatie in je klembord gevonden.",
+                "invalid": "Er is geen geldige vizier identificatie in je klembord gevonden.",
                 "error": "Er is een fout opgetreden bij het importeren van het vizier."
             }
         }
