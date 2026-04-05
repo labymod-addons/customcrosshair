@@ -4,6 +4,12 @@
             "name": "Crosshair personnalisé",
             "enabled": {
                 "name": "Activé"
+            },
+            "canvas": {
+                "name": "Modifier le crosshair"
+            },
+            "displayInThirdPerson": {
+                "name": "Afficher en vue à la troisième personne"
             }
         }
     }
