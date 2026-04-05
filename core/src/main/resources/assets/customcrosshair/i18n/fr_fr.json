@@ -1,1 +1,10 @@
-{}
+{
+    "customcrosshair": {
+        "settings": {
+            "name": "Crosshair personnalisé",
+            "enabled": {
+                "name": "Activé"
+            }
+        }
+    }
+}
