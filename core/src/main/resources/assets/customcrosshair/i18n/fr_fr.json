@@ -10,6 +10,53 @@
             },
             "displayInThirdPerson": {
                 "name": "Afficher en vue à la troisième personne"
+            },
+            "rotation": {
+                "name": "Rotation"
+            },
+            "vanillaBlending": {
+                "name": "Fusion Vanilla"
+            },
+            "color": {
+                "name": "Couleur"
+            },
+            "outlineThickness": {
+                "name": "Épaisseur du contour"
+            },
+            "outlineColor": {
+                "name": "Couleur du contour"
+            },
+            "dynamicColor": {
+                "name": "Couleur dynamique"
+            },
+            "neutralColor": {
+                "name": "Couleur neutre"
+            },
+            "hostileColor": {
+                "name": "Couleur hostile"
+            },
+            "playerColor": {
+                "name": "Couleur du joueur"
+            },
+            "header": {
+                "coloring": {
+                    "name": "Couleurs"
+                }
+            }
+        },
+        "activity": {
+            "presets": {
+                "title": "Préréglages"
+            },
+            "edit": {
+                "title": "Personnaliser",
+                "share": {
+                    "name": "Partager",
+                    "description": "Copiez l'identifiant unique de la réticule actuel dans votre presse-papiers. Les autres joueurs peuvent utiliser cet identifiant pour importer votre réticule."
+                },
+                "import": {
+                    "name": "Importer"
+                }
             }
         }
     }
