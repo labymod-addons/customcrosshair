@@ -55,8 +55,20 @@
                     "description": "Copiez l'identifiant unique de la réticule actuel dans votre presse-papiers. Les autres joueurs peuvent utiliser cet identifiant pour importer votre réticule."
                 },
                 "import": {
-                    "name": "Importer"
+                    "name": "Importer",
+                    "description": "Importer une réticule à partir de son identifiant unique. Si le bouton est désactivé, aucun identifiant valide n'a été trouvé dans votre presse-papiers."
                 }
+            }
+        },
+        "notification": {
+            "share": {
+                "copied": "La réticule a été copiée dans votre presse-papiers.",
+                "error": "Une erreur s'est produite lors de la génération de l'identifiant. Veuillez vérifier vos journaux."
+            },
+            "import": {
+                "success": "Réticule importée avec succès depuis votre presse-papiers.",
+                "invalid": "Impossible de trouver un identifiant de réticule valide dans votre presse-papiers.",
+                "error": "Une erreur s'est produite lors de l'importation du réticule."
             }
         }
     }
