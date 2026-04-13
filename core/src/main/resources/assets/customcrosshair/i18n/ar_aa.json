@@ -1,1 +1,13 @@
-{}
+{
+    "customcrosshair": {
+        "settings": {
+            "name": "مُصمَّم مؤشر التصويب",
+            "enabled": {
+                "name": "مُفعّل"
+            },
+            "canvas": {
+                "name": "تعديل مؤشر التصويب"
+            }
+        }
+    }
+}
