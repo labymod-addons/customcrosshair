@@ -62,7 +62,13 @@
         },
         "notification": {
             "import": {
-                "success": "Sigtekornet blev importeret fra din udklipsholder."
+                "success": "Sigtekornet blev importeret fra din udklipsholder.",
+                "invalid": "Der kunne ikke findes en gyldig sigtekornsidentifikator på dit udklipsholder.",
+                "error": "Der opstod en fejl under importeringen af sigtekornet."
+            },
+            "share": {
+                "copied": "Sigtekornet er blevet kopieret til din udklipsholder.",
+                "error": "Der opstod en fejl under genereringen af identifikatoren. Tjek venligst dine logs."
             }
         }
     }
