@@ -17,6 +17,40 @@
                 "coloring": {
                     "name": "Cores"
                 }
+            },
+            "neutralColor": {
+                "name": "Cor Neutra"
+            },
+            "hostileColor": {
+                "name": "Cor Hostil"
+            },
+            "playerColor": {
+                "name": "Cor do Jogador"
+            },
+            "dynamicColor": {
+                "name": "Cor Dinâmica"
+            }
+        },
+        "activity": {
+            "presets": {
+                "title": "Predefinições"
+            },
+            "edit": {
+                "title": "Personalizar",
+                "share": {
+                    "name": "Compartilhar"
+                },
+                "import": {
+                    "name": "Importar"
+                }
+            }
+        },
+        "notification": {
+            "share": {
+                "copied": "A mira foi copiada para a sua área de transferência."
+            },
+            "import": {
+                "success": "Mira importada com sucesso da sua área de transferência."
             }
         }
     }
