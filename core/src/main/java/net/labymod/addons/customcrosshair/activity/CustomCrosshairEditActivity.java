@@ -20,9 +20,12 @@ import java.util.concurrent.TimeUnit;
 import net.labymod.addons.customcrosshair.CustomCrosshairConfiguration;
 import net.labymod.addons.customcrosshair.canvas.CrosshairCanvas;
 import net.labymod.addons.customcrosshair.canvas.CrosshairCanvasPreset;
+import net.labymod.addons.customcrosshair.share.CrosshairChatShare;
+import net.labymod.addons.customcrosshair.share.CrosshairShare;
 import net.labymod.addons.customcrosshair.widgets.CrosshairCanvasRendererWidget;
 import net.labymod.addons.customcrosshair.widgets.edit.CrosshairPresetListWidget;
 import net.labymod.addons.customcrosshair.widgets.edit.EditCrosshairCanvasWidget;
+import net.labymod.api.Laby;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.gui.lss.style.modifier.attribute.AttributeState;
 import net.labymod.api.client.gui.screen.Parent;
@@ -36,17 +39,44 @@ import net.labymod.api.client.gui.screen.widget.widgets.layout.ScrollWidget;
 import net.labymod.api.client.gui.screen.widget.widgets.layout.list.VerticalListWidget;
 import net.labymod.api.notification.Notification;
 import net.labymod.api.util.concurrent.task.Task;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Link("edit.lss")
 public class CustomCrosshairEditActivity extends Activity {
 
   private final CustomCrosshairConfiguration configuration;
+  // A crosshair received in the Laby Chat and its canvas, drawn on without touching the config
+  private final @Nullable CrosshairShare received;
+  private final @Nullable CrosshairCanvas receivedCanvas;
   private EditCrosshairCanvasWidget editCanvas;
   private ButtonWidget importButton;
   private Task clipboardRefreshTask;
 
   public CustomCrosshairEditActivity(final CustomCrosshairConfiguration configuration) {
+    this(configuration, null);
+  }
+
+  private CustomCrosshairEditActivity(
+      final CustomCrosshairConfiguration configuration,
+      final @Nullable CrosshairShare received
+  ) {
     this.configuration = configuration;
+    this.received = received;
+    this.receivedCanvas = received == null ? null : received.canvas();
+  }
+
+  /**
+   * Opens the editor on the canvas of a received crosshair. Nothing is saved unless the player
+   * saves it, which takes over the canvas only.
+   */
+  public static void openReceived(
+      final @NotNull CustomCrosshairConfiguration configuration,
+      final @NotNull CrosshairShare received
+  ) {
+    Laby.labyAPI().minecraft().minecraftWindow().displayScreen(
+        new CustomCrosshairEditActivity(configuration, received)
+    );
   }
 
   @Override
@@ -55,6 +85,14 @@ public class CustomCrosshairEditActivity extends Activity {
 
     final VerticalListWidget<Widget> container = new VerticalListWidget<>();
     container.addId("container");
+
+    if (this.received != null) {
+      final ComponentWidget receivedHint = ComponentWidget.i18n(
+          "customcrosshair.activity.edit.received"
+      );
+      receivedHint.addId("title", "received-hint");
+      container.addChild(receivedHint);
+    }
 
     final ComponentWidget presetTitle = ComponentWidget.i18n(
         "customcrosshair.activity.presets.title"
@@ -84,12 +122,48 @@ public class CustomCrosshairEditActivity extends Activity {
     final FlexibleContentWidget editWrapper = new FlexibleContentWidget();
     editWrapper.addId("edit-wrapper");
 
-    this.editCanvas = new EditCrosshairCanvasWidget(this.configuration.canvas().get());
+    // Outside of a received crosshair the editor draws on the configured canvas directly
+    this.editCanvas = new EditCrosshairCanvasWidget(
+        this.receivedCanvas == null ? this.configuration.canvas().get() : this.receivedCanvas
+    );
     this.editCanvas.addId("edit-canvas");
     editWrapper.addContent(this.editCanvas);
 
     final FlexibleContentWidget inputWrapper = new FlexibleContentWidget();
     inputWrapper.addId("input-wrapper");
+
+    if (this.received != null) {
+      final ButtonWidget saveButton = ButtonWidget.i18n(
+          "customcrosshair.activity.edit.save.name"
+      );
+      saveButton.addId("save-button");
+      saveButton.setHoverComponent(
+          Component.translatable("customcrosshair.activity.edit.save.description")
+      );
+      saveButton.setPressable(() -> {
+        this.configuration.canvas().set(this.editCanvas.canvas().copy());
+        this.configuration.enabled().set(true);
+        this.displayPreviousScreen();
+      });
+
+      inputWrapper.addContent(saveButton);
+    }
+
+    // Only on client builds with Laby Chat sharing
+    if (CrosshairChatShare.isAvailable()) {
+      final ButtonWidget chatShareButton = ButtonWidget.i18n(
+          "customcrosshair.activity.edit.chatShare.name"
+      );
+      chatShareButton.addId("chat-share-button");
+      chatShareButton.setHoverComponent(
+          Component.translatable("customcrosshair.activity.edit.chatShare.description")
+      );
+      chatShareButton.setPressable(
+          () -> CrosshairChatShare.share(this.editCanvas.canvas(), this.received)
+      );
+
+      inputWrapper.addContent(chatShareButton);
+    }
 
     final ButtonWidget shareButton = ButtonWidget.i18n(
         "customcrosshair.activity.edit.share.name"
@@ -156,7 +230,11 @@ public class CustomCrosshairEditActivity extends Activity {
       this.clipboardRefreshTask = null;
     }
 
-    this.configuration.canvas().set(this.editCanvas.saveDraft());
+    // A received crosshair is only taken over with the save button
+    if (this.received == null) {
+      this.configuration.canvas().set(this.editCanvas.saveDraft());
+    }
+
     super.onCloseScreen();
   }
 

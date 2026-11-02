@@ -18,6 +18,7 @@ package net.labymod.addons.customcrosshair;
 
 import net.labymod.addons.customcrosshair.listener.IngameOverlayElementRenderListener;
 import net.labymod.addons.customcrosshair.listener.JsonConfigLoaderInitializeListener;
+import net.labymod.addons.customcrosshair.share.CrosshairChatShare;
 import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.resources.ResourceLocation;
 import net.labymod.api.models.addon.annotation.AddonMain;
@@ -40,6 +41,16 @@ public class CustomCrosshair extends LabyAddon<CustomCrosshairConfiguration> {
         this,
         this.labyAPI().minecraft()
     ));
+
+    // Share the crosshair with friends through the Laby Chat, on client builds that have it
+    try {
+      Class.forName(CrosshairChatShare.SHARE_API_CLASS);
+      CrosshairChatShare.register(this::configuration);
+    } catch (final ClassNotFoundException | LinkageError ignored) {
+      this.logger().info(
+          "Laby Chat sharing not available in this client build, the crosshair cannot be shared"
+      );
+    }
   }
 
   @Override
