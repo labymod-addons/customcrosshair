@@ -30,12 +30,12 @@ import org.jetbrains.annotations.Nullable;
 public final class CrosshairChatShare {
 
   /**
-   * The registry of the share API, present from Laby Client 49 on.
+   * The registry of the share API, present from Laby Client 50 on.
    */
   public static final String SHARE_API_CLASS =
       "net.labymod.api.labyconnect.share.ChatShareRegistry";
 
-  private static @Nullable CrosshairShareable shareable;
+  private static @Nullable CrosshairShareKind shareKind;
 
   private CrosshairChatShare() {
   }
@@ -44,17 +44,17 @@ public final class CrosshairChatShare {
    * Registers the crosshair kind. Throws a {@link LinkageError} on a client without the share API.
    */
   public static void register(@NotNull Supplier<CustomCrosshairConfiguration> configuration) {
-    if (shareable != null) {
+    if (shareKind != null) {
       return;
     }
 
-    // Every call into the share API sits in CrosshairShareable: verifying this class must not
+    // Every call into the share API sits in CrosshairShareKind: verifying this class must not
     // need any share API type, it is loaded on clients without it too
-    shareable = CrosshairShareable.register(configuration);
+    shareKind = CrosshairShareKind.register(configuration);
   }
 
   public static boolean isAvailable() {
-    return shareable != null;
+    return shareKind != null;
   }
 
   /**
@@ -65,7 +65,7 @@ public final class CrosshairChatShare {
    *                 configured settings
    */
   public static void share(@NotNull CrosshairCanvas canvas, @Nullable CrosshairShare received) {
-    CrosshairShareable kind = shareable;
+    CrosshairShareKind kind = shareKind;
     if (kind == null) {
       return;
     }

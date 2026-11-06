@@ -16,7 +16,6 @@
 
 package net.labymod.addons.customcrosshair.share;
 
-import com.google.gson.JsonObject;
 import java.util.Objects;
 import java.util.function.Supplier;
 import net.labymod.addons.customcrosshair.CustomCrosshair;
@@ -31,74 +30,67 @@ import net.labymod.api.client.gui.icon.Icon;
 import net.labymod.api.configuration.loader.property.ConfigProperty;
 import net.labymod.api.labyconnect.share.ChatSharePreview;
 import net.labymod.api.labyconnect.share.ChatShareRegistry;
-import net.labymod.api.labyconnect.share.ChatShareable;
+import net.labymod.api.labyconnect.share.ShareKind;
+import net.labymod.api.labyconnect.share.ShareTarget;
+import net.labymod.api.labyconnect.share.ShareUndo;
 import net.labymod.api.util.Color;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * The crosshair as something to share in the Laby Chat: the canvas and the settings that change
- * how it looks. Viewing a received one opens its canvas in the crosshair editor.
+ * The crosshair as a kind to share in the Laby Chat: the canvas and the settings that change how
+ * it looks. A received one is switched on when applied, Undo brings back the crosshair before, and
+ * viewing one opens its canvas in the crosshair editor.
  */
-public final class CrosshairShareable implements ChatShareable<CrosshairShare> {
+public final class CrosshairShareKind {
 
-  public static final String KIND = CustomCrosshair.NAMESPACE + ":crosshair";
+  public static final String ID = CustomCrosshair.NAMESPACE + ":crosshair";
 
   private static final String LABEL = "Crosshair";
 
   private final ChatShareRegistry registry;
   private final Supplier<CustomCrosshairConfiguration> configuration;
-  private final Icon icon = Icon.svg(CustomCrosshair.withDefaultNamespace("textures/share.svg"));
+  private final ShareKind<CrosshairShare> kind;
 
-  private CrosshairShareable(
+  private CrosshairShareKind(
       @NotNull ChatShareRegistry registry,
       @NotNull Supplier<CustomCrosshairConfiguration> configuration
   ) {
     this.registry = registry;
     this.configuration = configuration;
+    this.kind = ShareKind.builder(ID, new CrosshairShareCodec(), ShareTarget.sync(this::apply))
+        .label(LABEL)
+        .displayName(Component.translatable("customcrosshair.share.name"))
+        .icon(Icon.svg(CustomCrosshair.withDefaultNamespace("textures/share.svg")))
+        .source(this::export)
+        .preview(CrosshairShareKind::preview)
+        .viewer(this::view)
+        .build();
   }
 
   /**
    * Creates the kind and registers it. Throws a {@link LinkageError} on a client without the share
    * API.
    */
-  static @NotNull CrosshairShareable register(
+  static @NotNull CrosshairShareKind register(
       @NotNull Supplier<CustomCrosshairConfiguration> configuration
   ) {
     ChatShareRegistry registry = Laby.references().chatShareRegistry();
-    CrosshairShareable shareable = new CrosshairShareable(registry, configuration);
-    registry.register(shareable);
-    return shareable;
+    CrosshairShareKind shareKind = new CrosshairShareKind(registry, configuration);
+    // The registry checks the namespace against this class, which belongs to the addon
+    registry.register(shareKind.kind);
+    return shareKind;
   }
 
   /**
    * Lets the player pick a friend and sends them the crosshair. Called on the render thread.
    */
   public void share(@NotNull CrosshairShare value) {
-    this.registry.share(this, value);
+    this.registry.share(this.kind, value);
   }
 
-  @Override
-  public @NotNull String kind() {
-    return KIND;
-  }
-
-  @Override
-  public @NotNull String label() {
-    return LABEL;
-  }
-
-  @Override
-  public @NotNull Component displayName() {
-    return Component.translatable("customcrosshair.share.name");
-  }
-
-  @Override
-  public @NotNull Icon icon() {
-    return this.icon;
-  }
-
-  @Override
+  /**
+   * The configured crosshair, kept inside the ranges of the settings.
+   */
   public @NotNull CrosshairShare export() {
     CustomCrosshairConfiguration config = this.configuration.get();
     CrosshairCanvas canvas = config.canvas().get();
@@ -122,27 +114,16 @@ public final class CrosshairShareable implements ChatShareable<CrosshairShare> {
     );
   }
 
-  @Override
-  public @NotNull JsonObject write(@NotNull CrosshairShare value) {
-    return value.write();
+  /**
+   * Takes over a received crosshair. Undo brings back the one before, switch included.
+   */
+  private @NotNull ShareUndo apply(@NotNull CrosshairShare value) {
+    CrosshairShare before = this.export();
+    this.write(value);
+    return ShareUndo.of(() -> this.write(before));
   }
 
-  @Override
-  public @Nullable CrosshairShare read(@NotNull JsonObject data) {
-    return CrosshairShare.read(data);
-  }
-
-  @Override
-  public @Nullable ChatSharePreview preview(@NotNull CrosshairShare value) {
-    return ChatSharePreview.pixelArt(
-        CrosshairCanvas.SIZE,
-        CrosshairCanvas.SIZE,
-        value.previewPixels()
-    );
-  }
-
-  @Override
-  public void apply(@NotNull CrosshairShare value) {
+  private void write(@NotNull CrosshairShare value) {
     CustomCrosshairConfiguration config = this.configuration.get();
     Settings settings = value.settings();
     config.canvas().set(value.canvas());
@@ -159,19 +140,21 @@ public final class CrosshairShareable implements ChatShareable<CrosshairShare> {
     config.enabled().set(value.isEnabled());
   }
 
-  @Override
-  public boolean canView() {
-    return true;
-  }
-
   /**
    * Opens the canvas of a received crosshair in the editor, unsaved. Saving there takes over the
    * canvas and switches the addon on, the colors and other settings stay; sharing sends the
    * received crosshair on with the drawn canvas.
    */
-  @Override
-  public void view(@NotNull CrosshairShare value) {
+  private void view(@NotNull CrosshairShare value) {
     CustomCrosshairEditActivity.openReceived(this.configuration.get(), value);
+  }
+
+  private static @NotNull ChatSharePreview preview(@NotNull CrosshairShare value) {
+    return ChatSharePreview.pixelArt(
+        CrosshairCanvas.SIZE,
+        CrosshairCanvas.SIZE,
+        value.previewPixels()
+    );
   }
 
   private static boolean bool(ConfigProperty<Boolean> property, boolean fallback) {
