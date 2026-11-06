@@ -44,12 +44,24 @@
         }
       }
     },
+    "share": {
+      "name": "Crosshair"
+    },
     "activity": {
       "presets": {
         "title": "Presets"
       },
       "edit": {
         "title": "Customize",
+        "received": "A crosshair you received. Nothing changes until you save it.",
+        "save": {
+          "name": "Save",
+          "description": "Use the shape of this crosshair. Your colors and other settings stay as they are."
+        },
+        "chatShare": {
+          "name": "Send",
+          "description": "Send this crosshair with its colors and settings to a friend in the Laby Chat."
+        },
         "share": {
           "name": "Share",
           "description": "Copy the unique identifier of the current crosshair to your clipboard. Other players can use this identifier to import your crosshair."
